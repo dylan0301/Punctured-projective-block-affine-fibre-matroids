@@ -137,8 +137,7 @@ $$
 Moreover,
 
 $$
-\mathrm{rk}_W(S\cup\{\bar j\})
-=
+\mathrm{rk}_W(S\cup\{\bar j\}) =
 \mathrm{rk}_W(S)+
 \begin{cases}
 0,&m_1,m_2,m_3\ge2,\\
@@ -160,8 +159,7 @@ $$
 The direct-sum decomposition of $W$ gives
 
 $$
-\langle S\rangle
-=
+\langle S\rangle =
 \langle S_1\rangle\oplus
 \langle S_2\rangle\oplus
 \langle S_3\rangle,
