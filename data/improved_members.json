@@ -1,0 +1,49 @@
+{
+  "snapshot_date": "2026-08-08",
+  "website_database": "https://matroid-correlation-constants.icarm.cloud/database.json",
+  "family_formula": "6(q+1)/(5q+6)",
+  "members": [
+    {
+      "field": 4,
+      "q": 4,
+      "n": 50,
+      "rank": 7,
+      "distinguished_pair_ratio": "15/13",
+      "basis_cell_counts": {
+        "contain_both": 442368,
+        "only_i": 884736,
+        "only_j": 5750784,
+        "avoid_both": 13271040
+      },
+      "previous_record": {
+        "name": "HSW spike construction at q = 4",
+        "n": 18,
+        "rank": 5,
+        "alpha": "8/7"
+      },
+      "difference": "1/91",
+      "strict_improvement": true
+    },
+    {
+      "field": 7,
+      "q": 7,
+      "n": 149,
+      "rank": 7,
+      "distinguished_pair_ratio": "48/41",
+      "basis_cell_counts": {
+        "contain_both": 155649627,
+        "only_i": 1089547389,
+        "only_j": 6381634707,
+        "avoid_both": 52298274672
+      },
+      "previous_record": {
+        "name": "Double-extension sample over GF(7)",
+        "n": 26,
+        "rank": 9,
+        "alpha": "280043/243256"
+      },
+      "difference": "194525/9973496",
+      "strict_improvement": true
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "name": "Three-punctured-line affine-fibre matroids",
+  "short": "Three punctured lines",
+  "claim": "lower",
+  "parameter": "prime powers \\(q\\ge 2\\); the plotted members are restricted to the record-improving cases \\(q=4\\) and \\(q=7\\)",
+  "formula_tex": "\\overline{\\alpha}(M_q)\\ge R_{ij}(M_q)=\\frac{6(q+1)}{5q+6}",
+  "size_rank_tex": "|E(M_q)|=3q^2+2,\\qquad \\operatorname{rk}(M_q)=7",
+  "supremum": "6/5",
+  "supremum_kind": "approached",
+  "summary": "For every prime power q, an explicit rank-7 GF(q)-representable matroid has a distinguished-pair ratio 6(q+1)/(5q+6), increasing to 6/5. The plotted members are exactly the current-record improvements: q=4 gives 15/13 on 50 elements, and q=7 gives 48/41 on 149 elements.",
+  "construction": "Let F=GF(q), W=U_1 direct-sum U_2 direct-sum U_3 with U_r=<a_r,z_r>, and j-bar=a_1+a_2+a_3. In V=F e_0 direct-sum W, include i=e_0 and j=(0,j-bar). On each projective line PG(U_r), delete [a_r], retain the q directions represented by z_r and a_r+s z_r for nonzero s in F, and replace every retained direction g by its complete affine fibre {t e_0+g:t in F}. The resulting vector matroid has rank 7 and 3q^2+2 elements.",
+  "curve_explanation": "This is a dashed certified lower-bound curve: it records the exact distinguished-pair value R_ij(M_q), not a proved formula for the full invariant \\(\\overline{\\alpha}(M_q)\\). Only \\(q=4\\) and \\(q=7\\) are plotted because these are the members that strictly improve the website's field records in the 2026-08-08 database snapshot. The general formula tends increasingly to \\(6/5\\) and never attains it.",
+  "proof_status": "Complete proof of the construction, rank, four basis-cell counts, distinguished-pair formula, monotonicity, and supremum is provided in the linked repository. The q=4 and q=7 record comparisons are exact. Equality with the full invariant of M_q for general q is not claimed.",
+  "proof_url": "https://github.com/dylan0301/Three-punctured-line-affine-fibre-matroids/blob/main/PROOF.md",
+  "series": "[{\"parameter\":\"q = 4\",\"n\":50,\"rank\":7,\"alpha\":\"15/13\",\"field\":4},{\"parameter\":\"q = 7\",\"n\":149,\"rank\":7,\"alpha\":\"48/41\",\"field\":7}]",
+  "contributors": "Jeewon Kim",
+  "discovery_date": "2026-08-06",
+  "ai_used": "yes",
+  "ai_model": "GPT-5.6 Pro",
+  "ai_role": "AI assisted with computational exploration, exact finite-field counting, symbolic simplification, proof auditing, record comparison, and preparation of reproducible submission files. The submitted claim is the distinguished-pair lower bound proved in the linked writeup.",
+  "ai_chat_url": "https://chatgpt.com/share/6a7698a2-c044-83ee-9851-1fcaac81cf25?ogimg=plain"
+}

@@ -1,0 +1,16 @@
+[
+  {
+    "parameter": "q = 4",
+    "n": 50,
+    "rank": 7,
+    "alpha": "15/13",
+    "field": 4
+  },
+  {
+    "parameter": "q = 7",
+    "n": 149,
+    "rank": 7,
+    "alpha": "48/41",
+    "field": 7
+  }
+]
