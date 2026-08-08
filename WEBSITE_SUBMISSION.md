@@ -3,13 +3,13 @@
 Target: <https://matroid-correlation-constants.icarm.cloud/?maxn=1000>
 
 Use the **Infinite family** form.  This is not a concrete-verifier submission:
-the two record-improving members have \(n=50\) and \(n=149\), while the family
+the two record-improving members have $n=50$ and $n=149$, while the family
 claim is proved uniformly from the construction and basis-cell count.
 
 The proposal must be classified as a **certified lower bound** (`lower`), not an
 exact full-invariant claim.  The proof establishes one distinguished-pair ratio
-for every prime power \(q\); it does not establish
-\(\overline{\alpha}(M_q)=R_{ij}(M_q)\) for every \(q\).
+for every prime power $q$; it does not establish
+$\overline{\alpha}(M_q)=R_{ij}(M_q)$ for every $q$.
 
 ## Exact form fields
 
@@ -38,7 +38,7 @@ lower
 ### Parameter
 
 ```text
-prime powers \(q\ge 2\); the plotted members are restricted to the record-improving cases \(q=4\) and \(q=7\)
+prime powers $q\ge 2$; the plotted members are restricted to the record-improving cases $q=4$ and $q=7$
 ```
 
 ### Formula
@@ -80,7 +80,7 @@ Let F=GF(q), W=U_1 direct-sum U_2 direct-sum U_3 with U_r=<a_r,z_r>, and j-bar=a
 ### What the curve shows
 
 ```text
-This is a dashed certified lower-bound curve: it records the exact distinguished-pair value R_ij(M_q), not a proved formula for the full invariant \(\overline{\alpha}(M_q)\). Only q=4 and q=7 are plotted because these are the members that strictly improve the website's field records in the 2026-08-08 database snapshot. The general formula tends increasingly to 6/5 and never attains it.
+This is a dashed certified lower-bound curve: it records the exact distinguished-pair value R_ij(M_q), not a proved formula for the full invariant $\overline{\alpha}(M_q)$. Only q=4 and q=7 are plotted because these are the members that strictly improve the website's field records in the 2026-08-08 database snapshot. The general formula tends increasingly to 6/5 and never attains it.
 ```
 
 ### Proof status
@@ -146,22 +146,22 @@ The website database snapshot used here is dated 2026-08-08.
 
 ### GF(4)
 
-\[
+$$
 \frac{15}{13}-\frac87=\frac1{91}>0.
-\]
+$$
 
-The proposed member has rank \(7\), size \(50\), and a proved distinguished-pair
-lower bound \(15/13\).
+The proposed member has rank $7$, size $50$, and a proved distinguished-pair
+lower bound $15/13$.
 
 ### GF(7)
 
-\[
+$$
 \frac{48}{41}-\frac{280043}{243256}
 =\frac{194525}{9973496}>0.
-\]
+$$
 
-The proposed member has rank \(7\), size \(149\), and a proved
-distinguished-pair lower bound \(48/41\).
+The proposed member has rank $7$, size $149$, and a proved
+distinguished-pair lower bound $48/41$.
 
 ## Before submitting
 
