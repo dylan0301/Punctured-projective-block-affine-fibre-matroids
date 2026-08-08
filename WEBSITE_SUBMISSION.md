@@ -50,7 +50,7 @@ prime powers \(q\ge 2\); the plotted members are restricted to the record-improv
 ### Size and rank
 
 ```text
-|E(M_q)|=3q^2+2,\qquad \operatorname{rk}(M_q)=7
+|E(M_q)|=3q^2+2,\qquad \mathrm{rk}(M_q)=7
 ```
 
 ### Supremum

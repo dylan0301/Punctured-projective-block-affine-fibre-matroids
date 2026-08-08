@@ -73,7 +73,7 @@ V=F e_0\oplus W,
 \bar j=a_1+a_2+a_3.
 $$
 
-On the projective line $\operatorname{PG}(U_r)$, delete the point
+On the projective line $\mathrm{PG}(U_r)$, delete the point
 $[a_r]$.  Use the following representatives for the remaining $q$
 projective directions:
 
@@ -109,7 +109,7 @@ Any two distinct directions of $\mathcal L_r$ span $U_r$, so the retained
 directions span $W$.  Together with $i=e_0$, they span $V$.  Hence
 
 $$
-\operatorname{rk}(M_q)=7.
+\mathrm{rk}(M_q)=7.
 $$
 
 ## 3. Two elementary lemmas
@@ -120,15 +120,15 @@ Let $S$ be a set of distinct retained quotient directions in $W$, and let
 $m_r$ be the number of members of $S$ lying in $U_r$.  Then
 
 $$
-\operatorname{rk}_W(S)=\sum_{r=1}^3\min(m_r,2).
+\mathrm{rk}_W(S)=\sum_{r=1}^3\min(m_r,2).
 $$
 
 Moreover,
 
 $$
-\operatorname{rk}_W(S\cup\{\bar j\})
+\mathrm{rk}_W(S\cup\{\bar j\})
 =
-\operatorname{rk}_W(S)+
+\mathrm{rk}_W(S)+
 \begin{cases}
 0,&m_1,m_2,m_3\ge2,\\
 1,&\text{otherwise}.
