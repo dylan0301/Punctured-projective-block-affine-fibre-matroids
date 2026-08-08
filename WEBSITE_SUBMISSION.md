@@ -38,7 +38,7 @@ lower
 ### Parameter
 
 ```text
-prime powers $q\ge 2$; the plotted members are restricted to the record-improving cases $q=4$ and $q=7$
+prime powers \(q\ge 2\); the plotted members are restricted to the record-improving cases \(q=4\) and \(q=7\)
 ```
 
 ### Formula
@@ -80,7 +80,7 @@ Let F=GF(q), W=U_1 direct-sum U_2 direct-sum U_3 with U_r=<a_r,z_r>, and j-bar=a
 ### What the curve shows
 
 ```text
-This is a dashed certified lower-bound curve: it records the exact distinguished-pair value R_ij(M_q), not a proved formula for the full invariant $\overline{\alpha}(M_q)$. Only q=4 and q=7 are plotted because these are the members that strictly improve the website's field records in the 2026-08-08 database snapshot. The general formula tends increasingly to 6/5 and never attains it.
+This is a dashed certified lower-bound curve: it records the exact distinguished-pair value R_ij(M_q), not a proved formula for the full invariant \(\overline{\alpha}(M_q)\). Only q=4 and q=7 are plotted because these are the members that strictly improve the website's field records in the 2026-08-08 database snapshot. The general formula tends increasingly to 6/5 and never attains it.
 ```
 
 ### Proof status
