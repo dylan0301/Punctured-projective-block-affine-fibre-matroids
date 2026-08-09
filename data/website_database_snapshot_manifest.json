@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "snapshot_date": "2026-08-09",
+  "snapshot_file": "website_database_2026-08-09.json",
+  "source_url": "https://matroid-correlation-constants.icarm.cloud/database.json",
+  "retrieved_at_utc": "2026-08-09T05:23:28Z",
+  "etag": "\"e914a97cae79909837dfa9980ee465a6\"",
+  "sha256": "e914a97cae79909837dfa9980ee465a60139783da4114c6c5052659d9edf4db7",
+  "source_repository": "https://github.com/icarm/matroid-correlation-constants",
+  "source_commit": "d9fc87242e3128df5516401908064e9edc541e42"
+}

@@ -1,0 +1,14 @@
+This repository uses two licenses.
+
+- Source code in `scripts/` and workflow configuration in `.github/` are
+  licensed under the MIT License in `LICENSE-MIT`.
+- The original mathematical proof, documentation, submission materials, and
+  project-authored data are licensed under the Creative Commons Attribution
+  4.0 International License in `LICENSE-CC-BY-4.0`. Attribution should be made
+  to Jeewon Kim.
+
+The archived external website database
+`data/website_database_2026-08-09.json` is included only to make the cited
+record comparison reproducible. It remains subject to the rights and terms of
+its source, the ICARM Matroid Correlation Constants website, and is not
+relicensed by this repository.

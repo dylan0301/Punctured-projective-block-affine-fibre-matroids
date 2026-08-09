@@ -19,7 +19,15 @@ $$
 Taking the supremum over the finite members gives the field bound. No
 monotonicity in $r$ is claimed; the sequence can initially decrease. Taking
 $q\to\infty$ afterwards gives the displayed family's iterated supremum
-$4/3$.
+$4/3$. The reverse order is valid too: for every fixed $r\ge2$,
+
+$$
+\lim_{q\to\infty}R_{ij}(M_{q,r})=\frac{4r}{3r+1},
+$$
+
+and then $r\to\infty$ again gives $4/3$. Thus $4/3$ is the unattained
+two-parameter supremum of the displayed exact ratios; the website's
+`iterated limit` label does not select a unique order.
 
 ## General construction
 
@@ -63,14 +71,17 @@ $$
 R_{ij}(M_{q,3,2})=\frac{6(q+1)}{5q+6}.
 $$
 
-The earlier GF(4) and GF(7) basis-cell certificates are retained in
+The earlier GF(4) and GF(7) basis-cell regression counts are retained in
 [`data/improved_members.json`](data/improved_members.json) as regression data
 for this special case.
 
 ## Current fixed-field improvements
 
-Against the website database snapshot of 2026-08-09, the limiting bounds are
-strict improvements for GF(4), GF(5), and GF(7).
+Against the frozen website database response archived on 2026-08-09 in
+[`data/website_database_2026-08-09.json`](data/website_database_2026-08-09.json),
+with provenance and its SHA-256 digest in
+[`data/website_database_snapshot_manifest.json`](data/website_database_snapshot_manifest.json),
+the limiting bounds are strict improvements for GF(4), GF(5), and GF(7).
 
 | field | new fixed-field lower bound | website record | exact difference | first plotted $k=2$ witness above the record |
 |---:|---:|---:|---:|---:|
@@ -109,12 +120,19 @@ are in [`submission/plotted_members.json`](submission/plotted_members.json).
 Run
 
 ```bash
+python3 -m pip install -r requirements-dev.txt
 python3 scripts/verify.py
+python3 -O scripts/verify.py
+python3 -m compileall -q scripts
+mypy scripts
 ```
 
 to check the local counting identities, exact finite ratios, limiting
-formulas, old special case, record comparisons, submission schema, matrix
-ranks, small brute-force basis counts, and Markdown style constraints.
+formulas, old special case, frozen record comparisons, submission schema,
+matrix ranks, independent small-case enumerations, and Markdown style
+constraints. These are validation and regression checks for the
+implementation and submitted data; the general mathematical claims rest on
+the analytic proof in [`PROOF.md`](PROOF.md).
 
 The deterministic generator supports the five plotted fields. For example,
 
@@ -132,3 +150,12 @@ Discovered by Jeewon Kim. GPT-5.6 Pro assisted with mathematical exploration,
 exact counting, asymptotic simplification, proof auditing, and preparation of
 the reproducible submission materials. The research conversation is available
 at [ChatGPT's public share link](https://chatgpt.com/share/6a77e552-a1dc-83e8-b0bb-05ff004d1084).
+
+## Licensing
+
+The source code and workflow configuration are available under the
+[MIT License](LICENSE-MIT). The project-authored proof, documentation,
+submission materials, and data are available under the
+[Creative Commons Attribution 4.0 International License](LICENSE-CC-BY-4.0),
+with attribution to Jeewon Kim. The archived external website database is not
+relicensed; see the repository's [license overview](LICENSE) for details.

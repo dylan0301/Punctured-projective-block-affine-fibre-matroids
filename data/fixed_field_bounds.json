@@ -1,6 +1,7 @@
 {
   "snapshot_date": "2026-08-09",
-  "website_database": "https://matroid-correlation-constants.icarm.cloud/database.json",
+  "website_database_snapshot": "data/website_database_2026-08-09.json",
+  "website_database_manifest": "data/website_database_snapshot_manifest.json",
   "submitted_subfamily": {
     "k": 2,
     "finite_ratio": "4w/(1+2/(q-1)+2w)",
@@ -14,10 +15,13 @@
       "field": 2,
       "fixed_field_lower_bound": "8/7",
       "previous_record": {
+        "id": 1,
         "name": "HSW finite-field spike M_2^5",
+        "field": "2",
         "n": 10,
         "rank": 5,
-        "alpha": "8/7"
+        "alpha": "8/7",
+        "current": true
       },
       "difference": "0",
       "comparison": "tie",
@@ -27,10 +31,13 @@
       "field": 3,
       "fixed_field_lower_bound": "6/5",
       "previous_record": {
+        "id": 3,
         "name": "Ternary rank-6 benchmark",
+        "field": "3",
         "n": 12,
         "rank": 6,
-        "alpha": "100/81"
+        "alpha": "100/81",
+        "current": true
       },
       "difference": "-14/405",
       "comparison": "below",
@@ -40,10 +47,13 @@
       "field": 4,
       "fixed_field_lower_bound": "16/13",
       "previous_record": {
+        "id": 5,
         "name": "HSW spike construction at q = 4",
+        "field": "4",
         "n": 18,
         "rank": 5,
-        "alpha": "8/7"
+        "alpha": "8/7",
+        "current": true
       },
       "difference": "8/91",
       "comparison": "strict improvement",
@@ -59,10 +69,13 @@
       "field": 5,
       "fixed_field_lower_bound": "5/4",
       "previous_record": {
-        "name": "website record #9 over GF(5)",
+        "id": 9,
+        "name": null,
+        "field": "5",
         "n": 22,
         "rank": 9,
-        "alpha": "4664/4007"
+        "alpha": "4664/4007",
+        "current": true
       },
       "difference": "1379/16028",
       "comparison": "strict improvement",
@@ -78,10 +91,13 @@
       "field": 7,
       "fixed_field_lower_bound": "14/11",
       "previous_record": {
+        "id": 6,
         "name": "Double-extension sample over GF(7)",
+        "field": "7",
         "n": 26,
         "rank": 9,
-        "alpha": "280043/243256"
+        "alpha": "280043/243256",
+        "current": true
       },
       "difference": "325111/2675816",
       "comparison": "strict improvement",

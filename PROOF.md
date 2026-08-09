@@ -53,8 +53,22 @@ $$
 }.
 $$
 
-The right-hand side is largest among integers $k\ge2$ when $k=2$.
-Consequently,
+For the submitted $k=2$ subfamily, fixing $r$ instead gives the reverse
+limit
+
+$$
+\boxed{
+\lim_{q\to\infty}R_{ij}(M_{q,2,r})
+=\frac{4r}{3r+1}
+},
+$$
+
+where $q$ tends to infinity through prime powers. Thus both iterated orders
+converge to $4/3$. The exact finite $k=2$ values have two-parameter supremum
+$4/3$, and no finite member attains it.
+
+The general fixed-$q$ limit above is largest among integers $k\ge2$ when
+$k=2$. Consequently,
 
 $$
 \boxed{
@@ -85,13 +99,18 @@ $$
 R_{ij}(M)=\frac{N_{11}N_{00}}{N_{10}N_{01}}.
 $$
 
+Call a pair $e,f$ **eligible** if $e\ne f$ and neither element is a loop or a
+coloop. For such a pair, basis exchange ensures that $N_{10}$ and $N_{01}$
+are positive, so the displayed ratio is defined.
+
 The unweighted matroid invariant is
 
 $$
 \overline{\alpha}(M)=\max_{e\ne f}R_{ef}(M),
 $$
 
-where the maximum ranges over eligible nonloop, noncoloop pairs, and
+where the maximum ranges over eligible pairs. If $M$ has no eligible pair,
+set $\overline{\alpha}(M)=0$. Finally,
 
 $$
 \overline{\alpha}(F)
@@ -306,7 +325,14 @@ even though their normalized ratios need not be integers.
 
 ### Lemma 4.1: when $\bar j$ enters a blockwise span
 
-For a set $S\subset W$, put $S_\ell=S\cap U_\ell$. Then
+Let
+
+$$
+S\subseteq U_1\cup\cdots\cup U_k,
+$$
+
+so every vector in $S$ is supported in a single block, and put
+$S_\ell=S\cap U_\ell$. Then
 
 $$
 \langle S\rangle
@@ -326,7 +352,10 @@ $$
 
 Both assertions follow from the direct-sum decomposition
 $W=U_1\oplus\cdots\oplus U_k$ and the equality
-$\bar j=a_1+\cdots+a_k$. $\square$
+$\bar j=a_1+\cdots+a_k$. Every application below takes $S$ from the
+block-supported quotient directions
+$\mathcal P_1\cup\cdots\cup\mathcal P_k$, so the hypothesis is satisfied.
+$\square$
 
 ### Lemma 4.2: affine lifting of a unique relation
 
@@ -664,7 +693,32 @@ $$
 \frac{288}{265}.
 $$
 
-### The iterated supremum $4/3$
+### The reverse limit and the unattained two-parameter supremum
+
+Now fix $r\ge2$ and take $k=2$. As $q\to\infty$ through prime powers,
+
+$$
+v=\frac{q^r-1}{q-1}\longrightarrow\infty,
+\qquad
+x=\frac r{v-r}\longrightarrow0,
+$$
+
+and the compact formula gives
+
+$$
+w\longrightarrow\frac r{r+1}.
+$$
+
+Consequently,
+
+$$
+\lim_{q\to\infty}R_{ij}(M_{q,2,r})
+=\frac{4r/(r+1)}{1+2r/(r+1)}
+=\frac{4r}{3r+1}.
+$$
+
+Letting $r\to\infty$ now gives $4/3$, so the reverse iterated order has the
+same limit as the fixed-field order proved above.
 
 The lower bounds $4q/(3q+1)$ approach $4/3$ as $q\to\infty$ through prime
 powers. We also verify that the displayed finite $k=2$ ratios are strictly
@@ -710,8 +764,12 @@ $$
 $$
 
 Therefore the exact distinguished-pair values in the submitted two-parameter
-family have supremum $4/3$, reached only as the iterated limit
-$r\to\infty$ followed by $q\to\infty$.
+family have supremum $4/3$, which no finite pair $(q,r)$ attains. Both
+iterated orders approach this supremum. A diagonal choice of increasing prime
+powers $q_n$ and sufficiently large $r_n$ supplies joint paths approaching it
+as well. The website label `iterated limit` records that the submitted
+supremum is limiting rather than a finite member; it does not specify a unique
+order of limits.
 
 ## 8. The previous three-punctured-line result
 
@@ -779,8 +837,11 @@ rank-$7$ matroid on $3q^2+2$ elements.
 
 ## 9. Fixed-field comparisons for the submission
 
-The website database snapshot dated 2026-08-09 gives the following exact
-comparisons.
+The frozen website database response archived in
+[`data/website_database_2026-08-09.json`](data/website_database_2026-08-09.json),
+with retrieval metadata and a SHA-256 digest in
+[`data/website_database_snapshot_manifest.json`](data/website_database_snapshot_manifest.json),
+gives the following exact comparisons.
 
 For GF(4),
 
@@ -820,5 +881,8 @@ $$
 \frac65-\frac{100}{81}=-\frac{14}{405}<0.
 $$
 
-All finite plotted ratios and comparisons are checked exactly by
-[`scripts/verify.py`](scripts/verify.py).
+All finite plotted ratios and comparisons are regression-checked exactly by
+[`scripts/verify.py`](scripts/verify.py), and small cases are independently
+enumerated there. These computations validate the formulas' implementation
+and the submission data; the analytic arguments above establish the universal
+claims.
