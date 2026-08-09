@@ -128,10 +128,11 @@ Let $F=\mathbf F_q$. Take $k$ mutually independent $r$-dimensional spaces
 
 $$
 U_\ell=\langle a_\ell,u_{\ell,2},\ldots,u_{\ell,r}\rangle_F
-\qquad (1\le\ell\le k),
+\qquad (1\le\ell\le k).
 $$
 
-and put
+Let $e_0$ be a basis vector for an additional one-dimensional $F$-space, and
+put
 
 $$
 W=\bigoplus_{\ell=1}^k U_\ell,

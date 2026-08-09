@@ -92,7 +92,7 @@ For every prime power \(q\) and finite \(r\ge 2\), an explicit \(\mathbf F_q\)-r
 ### Construction
 
 ```text
-Let \(F=\mathbf F_q\). Take two independent \(r\)-dimensional spaces \(U_1,U_2\) with marked nonzero vectors \(a_1,a_2\), and put \(W=U_1\oplus U_2\) and \(V=F e_0\oplus W\). In each \(\mathrm{PG}(U_\ell)\), delete \([a_\ell]\). For every retained projective direction \(g\), include its complete affine fibre \(\{t e_0+g:t\in F\}\). Finally include \(i=e_0\) and \(j=a_1+a_2\). The vector matroid of these columns has rank \(2r+1\) and the stated size.
+Let \(F=\mathbf F_q\). Take two independent \(r\)-dimensional spaces \(U_1,U_2\) with marked nonzero vectors \(a_1,a_2\), and put \(W=U_1\oplus U_2\). Let \(e_0\) be a basis vector for an additional one-dimensional \(F\)-space, and set \(V=F e_0\oplus W\). In each \(\mathrm{PG}(U_\ell)\), delete \([a_\ell]\). For every retained projective direction \(g\), include its complete affine fibre \(\{t e_0+g:t\in F\}\). Finally include \(i=e_0\) and \(j=a_1+a_2\). The vector matroid of these columns has rank \(2r+1\) and the stated size.
 ```
 
 ### What the curve shows
@@ -110,7 +110,7 @@ A complete analytic proof of the representation, rank, size, four basis-cell cou
 ### Proof URL
 
 ```text
-https://github.com/dylan0301/Punctured-projective-block-affine-fibre-matroids/blob/8b79fef1ceef5a6d90622b22d8167360b503e229/PROOF.md
+https://github.com/dylan0301/Punctured-projective-block-affine-fibre-matroids/blob/main/PROOF.md
 ```
 
 ### Plotted members

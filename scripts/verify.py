@@ -34,10 +34,10 @@ from generate_matrix import (  # noqa: E402
 RECORD_EXTRACT_PATH = "data/website_record_extract_2026-08-09.json"
 SOURCE_URL = "https://matroid-correlation-constants.icarm.cloud/database.json"
 LIVE_REQUEST_TIMEOUT_SECONDS = 20
-PROOF_COMMIT = "8b79fef1ceef5a6d90622b22d8167360b503e229"
+CITATION_COMMIT = "8b79fef1ceef5a6d90622b22d8167360b503e229"
 PROOF_URL = (
     "https://github.com/dylan0301/Punctured-projective-block-affine-fibre-matroids/"
-    f"blob/{PROOF_COMMIT}/PROOF.md"
+    "blob/main/PROOF.md"
 )
 EXPECTED_FIELDS = (2, 3, 4, 5, 7)
 RECORD_KEYS = {"id", "name", "field", "n", "rank", "alpha", "current", "created_at"}
@@ -824,7 +824,8 @@ EXPECTED_SUBMISSION_TEXT = {
     "construction": (
         "Let \\(F=\\mathbf F_q\\). Take two independent \\(r\\)-dimensional spaces "
         "\\(U_1,U_2\\) with marked nonzero vectors \\(a_1,a_2\\), and put "
-        "\\(W=U_1\\oplus U_2\\) and \\(V=F e_0\\oplus W\\). In each "
+        "\\(W=U_1\\oplus U_2\\). Let \\(e_0\\) be a basis vector for an additional "
+        "one-dimensional \\(F\\)-space, and set \\(V=F e_0\\oplus W\\). In each "
         "\\(\\mathrm{PG}(U_\\ell)\\), delete \\([a_\\ell]\\). For every retained projective "
         "direction \\(g\\), include its complete affine fibre \\(\\{t e_0+g:t\\in F\\}\\). "
         "Finally include \\(i=e_0\\) and \\(j=a_1+a_2\\). The vector matroid of these columns "
@@ -984,7 +985,7 @@ def check_submission_payload() -> None:
     )
     check(
         form["proof_url"] == PROOF_URL,
-        "proof URL must target the audited immutable commit",
+        "proof URL must target PROOF.md on the main branch",
     )
     check(re.match(r"^https?://", form["ai_chat_url"]) is not None, "AI chat URL must be HTTP(S)")
     if form["ai_used"] == "yes":
@@ -1064,7 +1065,7 @@ def check_citation_pin() -> None:
     except OSError as error:
         fail(f"could not read CITATION.cff: {error}")
     commit_lines = re.findall(r'^commit:\s*"?([0-9a-f]{40})"?\s*$', citation, re.MULTILINE)
-    check(commit_lines == [PROOF_COMMIT], "CITATION.cff must pin the audited proof commit")
+    check(commit_lines == [CITATION_COMMIT], "CITATION.cff must pin the audited proof commit")
 
 
 def vector_set_rank(vectors: tuple[tuple[int, ...], ...], q: int) -> int:
