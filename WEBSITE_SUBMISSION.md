@@ -106,7 +106,7 @@ Complete proof of the representation, rank, size, four basis-cell counts, exact 
 ### Proof URL
 
 ```text
-https://github.com/dylan0301/Three-punctured-line-affine-fibre-matroids/blob/agent/fixed-field-4q-over-3q-plus-1/PROOF.md
+https://github.com/dylan0301/Punctured-projective-block-affine-fibre-matroids/blob/main/PROOF.md
 ```
 
 ### Plotted members

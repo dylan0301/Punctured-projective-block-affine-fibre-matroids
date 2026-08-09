@@ -271,7 +271,7 @@ def check_submission_payload() -> None:
     assert "4q}{3q+1" in form["formula_tex"]
     assert "\\mathrm{rk}" in form["size_rank_tex"]
     assert form["proof_url"].endswith(
-        "/blob/agent/fixed-field-4q-over-3q-plus-1/PROOF.md"
+        "/Punctured-projective-block-affine-fibre-matroids/blob/main/PROOF.md"
     )
     assert re.fullmatch(r"\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])", form["discovery_date"])
 
