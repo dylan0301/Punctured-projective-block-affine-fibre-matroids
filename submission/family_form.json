@@ -18,5 +18,5 @@
   "ai_used": "yes",
   "ai_model": "GPT-5.6 Pro",
   "ai_role": "AI assisted with mathematical exploration, exact projective-geometry and affine-fibre counting, asymptotic simplification, proof auditing, record comparison, and preparation of reproducible submission files. The submitted claim is the distinguished-pair lower bound proved in the linked writeup.",
-  "ai_chat_url": ""
+  "ai_chat_url": "https://chatgpt.com/share/6a77e552-a1dc-83e8-b0bb-05ff004d1084"
 }

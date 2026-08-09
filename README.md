@@ -130,4 +130,5 @@ case.
 
 Discovered by Jeewon Kim. GPT-5.6 Pro assisted with mathematical exploration,
 exact counting, asymptotic simplification, proof auditing, and preparation of
-the reproducible submission materials.
+the reproducible submission materials. The research conversation is available
+at [ChatGPT's public share link](https://chatgpt.com/share/6a77e552-a1dc-83e8-b0bb-05ff004d1084).

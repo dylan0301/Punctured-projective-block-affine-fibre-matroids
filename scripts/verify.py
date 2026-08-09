@@ -265,7 +265,9 @@ def check_submission_payload() -> None:
     assert form["supremum_kind"] == "iterated limit"
     assert form["contributors"] == "Jeewon Kim"
     assert form["ai_used"] == "yes"
-    assert form["ai_chat_url"] == ""
+    assert form["ai_chat_url"] == (
+        "https://chatgpt.com/share/6a77e552-a1dc-83e8-b0bb-05ff004d1084"
+    )
     assert "4q}{3q+1" in form["formula_tex"]
     assert "\\mathrm{rk}" in form["size_rank_tex"]
     assert form["proof_url"].endswith(

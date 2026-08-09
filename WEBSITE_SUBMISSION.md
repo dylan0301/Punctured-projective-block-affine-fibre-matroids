@@ -126,7 +126,7 @@ Discovered by: Jeewon Kim
 Discovery date: 2026-08-09
 AI used: yes
 AI model: GPT-5.6 Pro
-Public AI conversation: leave blank
+Public AI conversation: https://chatgpt.com/share/6a77e552-a1dc-83e8-b0bb-05ff004d1084
 ```
 
 ### AI role
@@ -135,8 +135,9 @@ Public AI conversation: leave blank
 AI assisted with mathematical exploration, exact projective-geometry and affine-fibre counting, asymptotic simplification, proof auditing, record comparison, and preparation of reproducible submission files. The submitted claim is the distinguished-pair lower bound proved in the linked writeup.
 ```
 
-The public chat URL used for the earlier rank-$7$ result is not reused here,
-because it does not document the full generalized theorem.
+The linked public conversation documents the higher-rank construction, its
+exact counting formula, asymptotic bound, finite witnesses, and verification
+status.
 
 ## Previous result recovered exactly
 
