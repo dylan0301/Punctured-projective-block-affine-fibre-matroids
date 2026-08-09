@@ -1,0 +1,97 @@
+{
+  "snapshot_date": "2026-08-09",
+  "website_database": "https://matroid-correlation-constants.icarm.cloud/database.json",
+  "submitted_subfamily": {
+    "k": 2,
+    "finite_ratio": "4w/(1+2/(q-1)+2w)",
+    "fixed_field_limit": "4q/(3q+1)",
+    "iterated_supremum": "4/3",
+    "size": "2q^2(q^(r-1)-1)/(q-1)+2",
+    "rank": "2r+1"
+  },
+  "fields": [
+    {
+      "field": 2,
+      "fixed_field_lower_bound": "8/7",
+      "previous_record": {
+        "name": "HSW finite-field spike M_2^5",
+        "n": 10,
+        "rank": 5,
+        "alpha": "8/7"
+      },
+      "difference": "0",
+      "comparison": "tie",
+      "first_plotted_k2_witness_above_record": null
+    },
+    {
+      "field": 3,
+      "fixed_field_lower_bound": "6/5",
+      "previous_record": {
+        "name": "Ternary rank-6 benchmark",
+        "n": 12,
+        "rank": 6,
+        "alpha": "100/81"
+      },
+      "difference": "-14/405",
+      "comparison": "below",
+      "first_plotted_k2_witness_above_record": null
+    },
+    {
+      "field": 4,
+      "fixed_field_lower_bound": "16/13",
+      "previous_record": {
+        "name": "HSW spike construction at q = 4",
+        "n": 18,
+        "rank": 5,
+        "alpha": "8/7"
+      },
+      "difference": "8/91",
+      "comparison": "strict improvement",
+      "first_plotted_k2_witness_above_record": {
+        "r": 5,
+        "n": 2722,
+        "rank": 11,
+        "distinguished_pair_ratio": "50590/44111",
+        "difference": "1242/308777"
+      }
+    },
+    {
+      "field": 5,
+      "fixed_field_lower_bound": "5/4",
+      "previous_record": {
+        "name": "website record #9 over GF(5)",
+        "n": 22,
+        "rank": 9,
+        "alpha": "4664/4007"
+      },
+      "difference": "1379/16028",
+      "comparison": "strict improvement",
+      "first_plotted_k2_witness_above_record": {
+        "r": 5,
+        "n": 7802,
+        "rank": 11,
+        "distinguished_pair_ratio": "104950/90111",
+        "difference": "256946/361074777"
+      }
+    },
+    {
+      "field": 7,
+      "fixed_field_lower_bound": "14/11",
+      "previous_record": {
+        "name": "Double-extension sample over GF(7)",
+        "n": 26,
+        "rank": 9,
+        "alpha": "280043/243256"
+      },
+      "difference": "325111/2675816",
+      "comparison": "strict improvement",
+      "first_plotted_k2_witness_above_record": {
+        "r": 4,
+        "n": 5588,
+        "rank": 9,
+        "distinguished_pair_ratio": "3068/2623",
+        "difference": "11756619/638060488"
+      }
+    }
+  ]
+}

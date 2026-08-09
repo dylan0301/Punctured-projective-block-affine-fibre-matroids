@@ -1,75 +1,110 @@
-# Three-punctured-line affine-fibre matroids
+# Punctured-projective-block affine-fibre matroids
 
-This repository contains the proof and submission data for one explicit family
-of finite-field-representable matroids.
-
-For every prime power $q\ge 2$, the construction gives a rank-$7$
-$\mathbf F_q$-representable matroid $M_q$ on $3q^2+2$ elements with a
-distinguished pair $i,j$ satisfying
+This repository proves an explicit fixed-field lower bound for matroid
+correlation constants. For every prime power $q$,
 
 $$
-\overline{\alpha}(M_q)\;\ge\;R_{ij}(M_q)
-   =\frac{6(q+1)}{5q+6}.
+\boxed{\overline{\alpha}(\mathbf F_q)\ge \frac{4q}{3q+1}}.
 $$
 
-The displayed quantity is a proved **distinguished-pair lower bound**.  The
-repository does not claim that it is the full correlation constant of $M_q$
-for every $q$.
-
-## Record-improving members
-
-The website submission deliberately plots only the two members that improve the
-field records displayed by the Matroid Correlation Constants website on
-2026-08-08.
-
-| field | member | size | rank | proved lower bound | previous website record | exact improvement |
-|---:|---:|---:|---:|---:|---:|---:|
-| $\mathbf F_4$ | $M_4$ | 50 | 7 | $15/13$ | $8/7$ | $1/91$ |
-| $\mathbf F_7$ | $M_7$ | 149 | 7 | $48/41$ | $280043/243256$ | $194525/9973496$ |
-
-Thus
+The bound comes from finite matroids, not from an infinite-rank object. For
+every $r\ge2$, the construction gives a finite rank-$(2r+1)$,
+$\mathbf F_q$-representable matroid $M_{q,r}$ with a distinguished pair
+$i,j$. Its exact finite ratio is proved in [`PROOF.md`](PROOF.md), and
 
 $$
-\overline{\alpha}(\mathbf F_4)\ge \frac{15}{13}>\frac87,
+\lim_{r\to\infty}R_{ij}(M_{q,r})=\frac{4q}{3q+1}.
+$$
+
+Taking the supremum over the finite members gives the field bound. No
+monotonicity in $r$ is claimed; the sequence can initially decrease. Taking
+$q\to\infty$ afterwards gives the displayed family's iterated supremum
+$4/3$.
+
+## General construction
+
+The proof treats a three-parameter family $M_{q,k,r}$ for every prime power
+$q$ and integers $k,r\ge2$. It uses $k$ copies of
+$\mathrm{PG}(r-1,q)$ with one marked point deleted from each copy, replaces
+every retained projective direction by its complete $q$-element affine fibre,
+and adds a distinguished pair. The resulting matroid has
+
+$$
+\mathrm{rk}(M_{q,k,r})=kr+1,
 \qquad
-\overline{\alpha}(\mathbf F_7)\ge \frac{48}{41}>
-\frac{280043}{243256}.
+|E(M_{q,k,r})|
+=\frac{kq^2(q^{r-1}-1)}{q-1}+2.
 $$
 
-The comparison snapshot is recorded in
-[`data/improved_members.json`](data/improved_members.json).  The live source is
-<https://matroid-correlation-constants.icarm.cloud/database.json>.
+For fixed $q,k$,
 
-## Website submission route
+$$
+\lim_{r\to\infty}R_{ij}(M_{q,k,r})
+=\frac{k^2q}{(k^2-k+1)q+k-1}.
+$$
 
-The two relevant matroids have $n=50$ and $n=149$, so they are presented
-through the website's **Infinite family** form rather than as small concrete
-matroid submissions.  The form must use:
+Among integers $k\ge2$, this limit is largest at $k=2$, which gives
+$4q/(3q+1)$.
 
-- claim type: `lower`;
-- supremum: `6/5`;
-- supremum status: `approached`;
-- plotted members: only $q=4$ and $q=7$.
+## The previous result is a special case
 
-Use [`WEBSITE_SUBMISSION.md`](WEBSITE_SUBMISSION.md) for the field-by-field
-copying instructions and [`submission/family_form.json`](submission/family_form.json)
-for the exact form payload.
+The original three-punctured-line affine-fibre matroid is exactly
+$M_{q,3,2}$. Substitution gives
 
-## Files
+$$
+\mathrm{rk}(M_{q,3,2})=7,
+\qquad
+|E(M_{q,3,2})|=3q^2+2,
+$$
 
-- [`PROOF.md`](PROOF.md): complete construction and basis-cell count.
-- [`WEBSITE_SUBMISSION.md`](WEBSITE_SUBMISSION.md): submission classification,
-  exact record comparisons, and copy-paste fields.
-- [`submission/family_form.json`](submission/family_form.json): exact website
-  form keys and values.
-- [`submission/plotted_members.json`](submission/plotted_members.json): the two
-  plotted record-improving members.
-- [`data/improved_members.json`](data/improved_members.json): exact basis-cell
-  counts and record comparisons.
-- [`scripts/verify.py`](scripts/verify.py): dependency-free exact checks of all
-  formulas and submission data.
-- [`scripts/generate_matrix.py`](scripts/generate_matrix.py): deterministic row-matrix
-  generator for the two submitted members over GF(4) and GF(7).
+and recovers the previous exact finite formula
+
+$$
+R_{ij}(M_{q,3,2})=\frac{6(q+1)}{5q+6}.
+$$
+
+The earlier GF(4) and GF(7) basis-cell certificates are retained in
+[`data/improved_members.json`](data/improved_members.json) as regression data
+for this special case.
+
+## Current fixed-field improvements
+
+Against the website database snapshot of 2026-08-09, the limiting bounds are
+strict improvements for GF(4), GF(5), and GF(7).
+
+| field | new fixed-field lower bound | website record | exact difference | first plotted $k=2$ witness above the record |
+|---:|---:|---:|---:|---:|
+| $\mathbf F_4$ | $16/13$ | $8/7$ | $8/91$ | $r=5$, $50590/44111$ |
+| $\mathbf F_5$ | $5/4$ | $4664/4007$ | $1379/16028$ | $r=5$, $104950/90111$ |
+| $\mathbf F_7$ | $14/11$ | $280043/243256$ | $325111/2675816$ | $r=4$, $3068/2623$ |
+
+For GF(2), the limit equals $8/7$. For GF(3), the limit $6/5$ is below the
+website's concrete value $100/81$. Exact comparisons and finite witnesses are
+stored in [`data/fixed_field_bounds.json`](data/fixed_field_bounds.json).
+
+Every finite member here is represented directly over the stated field
+$\mathbf F_q$. This differs from the website's affine- and projective-geometry
+double-extension families, whose free extension and coextension may require a
+larger field. Their larger-looking geometry limit therefore does not imply a
+fixed-$\mathbf F_q$ bound.
+
+## Website submission
+
+The result belongs in the website's **Infinite family** form. It is a
+certified distinguished-pair lower bound, not a claim that $i,j$ maximizes the
+full invariant of every finite member. The submission uses:
+
+- claim type `lower`;
+- supremum `4/3`;
+- supremum status `iterated limit`;
+- grouped GF(2), GF(3), GF(4), GF(5), and GF(7) curves containing only exact
+  finite-$r$ values.
+
+See [`WEBSITE_SUBMISSION.md`](WEBSITE_SUBMISSION.md) and the exact payload in
+[`submission/family_form.json`](submission/family_form.json). The plotted data
+are in [`submission/plotted_members.json`](submission/plotted_members.json).
+
+## Verification and matrix generation
 
 Run
 
@@ -77,17 +112,22 @@ Run
 python3 scripts/verify.py
 ```
 
-to verify the closed formulas, the $q=4,7$ basis-cell counts, both strict
-record comparisons, the generated representation matrices, and the website payload
-schema.  For example, generate the GF(4) representation with
+to check the local counting identities, exact finite ratios, limiting
+formulas, old special case, record comparisons, submission schema, matrix
+ranks, small brute-force basis counts, and Markdown style constraints.
+
+The deterministic generator supports the five plotted fields. For example,
 
 ```bash
-python3 scripts/generate_matrix.py 4
+python3 scripts/generate_matrix.py 4 --r 5 --k 2
+python3 scripts/generate_matrix.py 4 --r 2 --k 3
 ```
+
+generate respectively a new-family member and the old three-line special
+case.
 
 ## Attribution and AI disclosure
 
-Discovered by Jeewon Kim, with GPT-5.6 Pro used for computational exploration,
-exact symbolic simplification, proof auditing, and preparation of the public
-submission materials.  The public discovery conversation is linked in the
-website payload.
+Discovered by Jeewon Kim. GPT-5.6 Pro assisted with mathematical exploration,
+exact counting, asymptotic simplification, proof auditing, and preparation of
+the reproducible submission materials.

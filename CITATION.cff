@@ -1,9 +1,9 @@
 cff-version: 1.2.0
-message: "Please cite this repository when using the three-punctured-line affine-fibre construction."
-title: "Three-punctured-line affine-fibre matroids"
+message: "Please cite this repository when using the punctured-projective-block affine-fibre construction."
+title: "Punctured-projective-block affine-fibre matroids"
 authors:
   - family-names: "Kim"
     given-names: "Jeewon"
-date-released: 2026-08-08
+date-released: 2026-08-09
 url: "https://github.com/dylan0301/Three-punctured-line-affine-fibre-matroids"
 repository-code: "https://github.com/dylan0301/Three-punctured-line-affine-fibre-matroids"

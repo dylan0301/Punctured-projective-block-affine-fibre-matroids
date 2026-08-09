@@ -1,6 +1,11 @@
 {
   "snapshot_date": "2026-08-08",
   "website_database": "https://matroid-correlation-constants.icarm.cloud/database.json",
+  "role": "regression data for the old (k,r)=(3,2) special case",
+  "special_case_parameters": {
+    "k": 3,
+    "r": 2
+  },
   "family_formula": "6(q+1)/(5q+6)",
   "members": [
     {
