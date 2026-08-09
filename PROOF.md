@@ -837,42 +837,51 @@ rank-$7$ matroid on $3q^2+2$ elements.
 
 ## 9. Fixed-field comparisons for the submission
 
-The frozen website database response archived in
-[`data/website_database_2026-08-09.json`](data/website_database_2026-08-09.json),
-with retrieval metadata and a SHA-256 digest in
-[`data/website_database_snapshot_manifest.json`](data/website_database_snapshot_manifest.json),
-gives the following exact comparisons.
+The compact website record extract
+[`data/website_record_extract_2026-08-09.json`](data/website_record_extract_2026-08-09.json),
+retrieved 2026-08-09 at 08:15:12 UTC, gives the following exact comparisons as
+of that retrieval. Its refreshed entries are GF(4) record #13,
+`[C 0 u 0; 0 C u 0; h h 0 1]`, with ratio $55752/48391$, and GF(7) record
+#12, `A variant of #11`, with ratio $147888/125779$.
 
 For GF(4),
 
 $$
-\frac{16}{13}-\frac87=\frac8{91}>0.
+\frac{16}{13}-\frac{55752}{48391}
+=\frac{49480}{629083}>0.
 $$
 
 For GF(5),
 
 $$
-\frac54-\frac{4664}{4007}
+\frac{5}{4}-\frac{4664}{4007}
 =\frac{1379}{16028}>0.
 $$
 
 For GF(7),
 
 $$
-\frac{14}{11}-\frac{280043}{243256}
-=\frac{325111}{2675816}>0.
+\frac{14}{11}-\frac{147888}{125779}
+=\frac{134138}{1383569}>0.
 $$
 
 These are limiting lower-bound comparisons. Genuine finite $k=2$ members
-already beat the displayed records: $(q,r)=(4,5),(5,5),(7,4)$ give
+already beat the displayed records: $(q,r)=(4,6),(5,5),(7,5)$ give
 respectively
 
 $$
-\frac{50590}{44111},
+\frac{188104}{162455},
 \qquad
 \frac{104950}{90111},
 \qquad
-\frac{3068}{2623}.
+\frac{1902350}{1602643}.
+$$
+
+In particular, the first plotted GF(7) witness is now the $r=5$ member, and
+
+$$
+\frac{1902350}{1602643}-\frac{147888}{125779}
+=\frac{2264012666}{201578833897}>0.
 $$
 
 For GF(2), the fixed-field limit equals $8/7$. For GF(3),

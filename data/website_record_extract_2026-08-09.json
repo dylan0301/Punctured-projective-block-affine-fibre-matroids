@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "source_url": "https://matroid-correlation-constants.icarm.cloud/database.json",
+  "retrieved_at_utc": "2026-08-09T08:15:12Z",
+  "etag": "\"530e5d627fb141120f4437ccaf7678b1\"",
+  "source_response_sha256": "530e5d627fb141120f4437ccaf7678b10a2645de2311024fd5c8215b412fc6ef",
+  "selection": {
+    "fields": [
+      2,
+      3,
+      4,
+      5,
+      7
+    ],
+    "current": true
+  },
+  "records": [
+    {
+      "id": 1,
+      "name": "HSW finite-field spike M_2^5",
+      "field": "2",
+      "n": 10,
+      "rank": 5,
+      "alpha": {
+        "numerator": 8,
+        "denominator": 7
+      },
+      "current": true,
+      "created_at": "2026-08-05 15:25:29"
+    },
+    {
+      "id": 3,
+      "name": "Ternary rank-6 benchmark",
+      "field": "3",
+      "n": 12,
+      "rank": 6,
+      "alpha": {
+        "numerator": 100,
+        "denominator": 81
+      },
+      "current": true,
+      "created_at": "2026-08-05 15:25:29"
+    },
+    {
+      "id": 13,
+      "name": "[C 0 u 0; 0 C u 0; h h 0 1]",
+      "field": "4",
+      "n": 26,
+      "rank": 9,
+      "alpha": {
+        "numerator": 55752,
+        "denominator": 48391
+      },
+      "current": true,
+      "created_at": "2026-08-09 08:11:58"
+    },
+    {
+      "id": 9,
+      "name": null,
+      "field": "5",
+      "n": 22,
+      "rank": 9,
+      "alpha": {
+        "numerator": 4664,
+        "denominator": 4007
+      },
+      "current": true,
+      "created_at": "2026-08-06 20:33:30"
+    },
+    {
+      "id": 12,
+      "name": "A variant of #11",
+      "field": "7",
+      "n": 26,
+      "rank": 9,
+      "alpha": {
+        "numerator": 147888,
+        "denominator": 125779
+      },
+      "current": true,
+      "created_at": "2026-08-09 08:00:25"
+    }
+  ]
+}

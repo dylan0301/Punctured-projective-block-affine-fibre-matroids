@@ -75,19 +75,21 @@ The earlier GF(4) and GF(7) basis-cell regression counts are retained in
 [`data/improved_members.json`](data/improved_members.json) as regression data
 for this special case.
 
-## Current fixed-field improvements
+## Fixed-field improvements at retrieval
 
-Against the frozen website database response archived on 2026-08-09 in
-[`data/website_database_2026-08-09.json`](data/website_database_2026-08-09.json),
-with provenance and its SHA-256 digest in
-[`data/website_database_snapshot_manifest.json`](data/website_database_snapshot_manifest.json),
-the limiting bounds are strict improvements for GF(4), GF(5), and GF(7).
+Against the website records in the compact extract
+[`data/website_record_extract_2026-08-09.json`](data/website_record_extract_2026-08-09.json),
+retrieved 2026-08-09 at 08:15:12 UTC, the limiting bounds are strict
+improvements for GF(4), GF(5), and GF(7) as of that retrieval. The refreshed
+entries are GF(4) record #13, `[C 0 u 0; 0 C u 0; h h 0 1]`, with ratio
+$55752/48391$, and GF(7) record #12, `A variant of #11`, with ratio
+$147888/125779$.
 
-| field | new fixed-field lower bound | website record | exact difference | first plotted $k=2$ witness above the record |
+| field | new fixed-field lower bound | website record at retrieval | exact difference | first plotted $k=2$ witness above the record |
 |---:|---:|---:|---:|---:|
-| $\mathbf F_4$ | $16/13$ | $8/7$ | $8/91$ | $r=5$, $50590/44111$ |
+| $\mathbf F_4$ | $16/13$ | $55752/48391$ | $49480/629083$ | $r=6$, $188104/162455$ |
 | $\mathbf F_5$ | $5/4$ | $4664/4007$ | $1379/16028$ | $r=5$, $104950/90111$ |
-| $\mathbf F_7$ | $14/11$ | $280043/243256$ | $325111/2675816$ | $r=4$, $3068/2623$ |
+| $\mathbf F_7$ | $14/11$ | $147888/125779$ | $134138/1383569$ | $r=5$, $1902350/1602643$ |
 
 For GF(2), the limit equals $8/7$. For GF(3), the limit $6/5$ is below the
 website's concrete value $100/81$. Exact comparisons and finite witnesses are
@@ -128,7 +130,7 @@ mypy scripts
 ```
 
 to check the local counting identities, exact finite ratios, limiting
-formulas, old special case, frozen record comparisons, submission schema,
+formulas, old special case, compact-extract record comparisons, submission schema,
 matrix ranks, independent small-case enumerations, and Markdown style
 constraints. These are validation and regression checks for the
 implementation and submitted data; the general mathematical claims rest on
@@ -150,12 +152,3 @@ Discovered by Jeewon Kim. GPT-5.6 Pro assisted with mathematical exploration,
 exact counting, asymptotic simplification, proof auditing, and preparation of
 the reproducible submission materials. The research conversation is available
 at [ChatGPT's public share link](https://chatgpt.com/share/6a77e552-a1dc-83e8-b0bb-05ff004d1084).
-
-## Licensing
-
-The source code and workflow configuration are available under the
-[MIT License](LICENSE-MIT). The project-authored proof, documentation,
-submission materials, and data are available under the
-[Creative Commons Attribution 4.0 International License](LICENSE-CC-BY-4.0),
-with attribution to Jeewon Kim. The archived external website database is not
-relicensed; see the repository's [license overview](LICENSE) for details.

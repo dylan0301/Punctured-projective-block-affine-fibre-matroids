@@ -145,24 +145,27 @@ status.
 
 ## Exact fixed-field comparisons
 
-The website database response used here is frozen in
-[`data/website_database_2026-08-09.json`](data/website_database_2026-08-09.json),
-with retrieval provenance and a SHA-256 digest in
-[`data/website_database_snapshot_manifest.json`](data/website_database_snapshot_manifest.json).
+The website records used here are in the compact extract
+[`data/website_record_extract_2026-08-09.json`](data/website_record_extract_2026-08-09.json),
+retrieved 2026-08-09 at 08:15:12 UTC. The comparisons below describe the
+records as of that retrieval. The refreshed entries are GF(4) record #13,
+`[C 0 u 0; 0 C u 0; h h 0 1]`, with ratio $55752/48391$, and GF(7) record
+#12, `A variant of #11`, with ratio $147888/125779$.
 
 ### GF(4)
 
 $$
-\frac{16}{13}-\frac87=\frac8{91}>0.
+\frac{16}{13}-\frac{55752}{48391}
+=\frac{49480}{629083}>0.
 $$
 
-The first plotted $k=2$ witness above $8/7$ is $r=5$, with rank $11$, size
-$2722$, and ratio $50590/44111$.
+The first plotted $k=2$ witness above $55752/48391$ is $r=6$, with rank $13$,
+size $10914$, and ratio $188104/162455$.
 
 ### GF(5)
 
 $$
-\frac54-\frac{4664}{4007}=\frac{1379}{16028}>0.
+\frac{5}{4}-\frac{4664}{4007}=\frac{1379}{16028}>0.
 $$
 
 The first plotted $k=2$ witness above $4664/4007$ is $r=5$, with rank $11$,
@@ -171,12 +174,17 @@ size $7802$, and ratio $104950/90111$.
 ### GF(7)
 
 $$
-\frac{14}{11}-\frac{280043}{243256}
-=\frac{325111}{2675816}>0.
+\frac{14}{11}-\frac{147888}{125779}
+=\frac{134138}{1383569}>0.
 $$
 
-The first plotted $k=2$ witness above $280043/243256$ is $r=4$, with rank
-$9$, size $5588$, and ratio $3068/2623$.
+The first plotted $k=2$ witness above $147888/125779$ is $r=5$, with rank
+$11$, size $39202$, and ratio $1902350/1602643$. Exactly,
+
+$$
+\frac{1902350}{1602643}-\frac{147888}{125779}
+=\frac{2264012666}{201578833897}>0.
+$$
 
 For GF(2), the limiting bound ties $8/7$. For GF(3),
 $6/5<100/81$, so neither is described as a strict improvement.

@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Exact, offline checks for the proof data and website submission."""
+"""Exact checks for the proof data and website submission, offline by default."""
 
 from __future__ import annotations
 
-import hashlib
+import argparse
 import io
 import json
 import re
@@ -14,6 +14,8 @@ from itertools import combinations
 from math import factorial, prod
 from pathlib import Path
 from typing import Any, NoReturn
+from urllib.error import HTTPError, URLError
+from urllib.request import Request, urlopen
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
@@ -29,20 +31,17 @@ from generate_matrix import (  # noqa: E402
     write_encoded_matrix,
 )
 
-SNAPSHOT_DATE = "2026-08-09"
-SNAPSHOT_FILENAME = "website_database_2026-08-09.json"
-SNAPSHOT_URL = "https://matroid-correlation-constants.icarm.cloud/database.json"
-SNAPSHOT_RETRIEVED_AT = "2026-08-09T05:23:28Z"
-SNAPSHOT_ETAG = '"e914a97cae79909837dfa9980ee465a6"'
-SNAPSHOT_SHA256 = "e914a97cae79909837dfa9980ee465a60139783da4114c6c5052659d9edf4db7"
-SOURCE_REPOSITORY = "https://github.com/icarm/matroid-correlation-constants"
-SOURCE_COMMIT = "d9fc87242e3128df5516401908064e9edc541e42"
+RECORD_EXTRACT_PATH = "data/website_record_extract_2026-08-09.json"
+SOURCE_URL = "https://matroid-correlation-constants.icarm.cloud/database.json"
+LIVE_REQUEST_TIMEOUT_SECONDS = 20
 PROOF_COMMIT = "8b79fef1ceef5a6d90622b22d8167360b503e229"
 PROOF_URL = (
     "https://github.com/dylan0301/Punctured-projective-block-affine-fibre-matroids/"
     f"blob/{PROOF_COMMIT}/PROOF.md"
 )
 EXPECTED_FIELDS = (2, 3, 4, 5, 7)
+RECORD_KEYS = {"id", "name", "field", "n", "rank", "alpha", "current", "created_at"}
+ALPHA_KEYS = {"numerator", "denominator"}
 
 
 class VerificationError(RuntimeError):
@@ -300,104 +299,187 @@ def check_closed_formulas() -> None:
     check(exact_ratio(4, 3, 2) < exact_ratio(4, 2, 2), "q=4 nonmonotonicity changed")
 
 
-def load_database_snapshot() -> tuple[dict[str, Any], dict[int, dict[str, Any]]]:
-    manifest_path = ROOT / "data" / "website_database_snapshot_manifest.json"
-    manifest = load_json(manifest_path)
-    check(isinstance(manifest, dict), "snapshot manifest must be a JSON object")
+def canonical_record(
+    value: object, where: str, *, exact_keys: bool
+) -> dict[str, Any]:
+    """Validate and retain only the fields stored in the compact extract."""
+    if not isinstance(value, dict):
+        fail(f"{where} must be an object")
+    keys = set(value)
+    if exact_keys:
+        check(keys == RECORD_KEYS, f"{where} keys do not match the compact-record schema")
+    else:
+        check(RECORD_KEYS <= keys, f"{where} is missing required record fields")
+
+    record_id = value.get("id")
+    check(type(record_id) is int and record_id > 0, f"{where} has an invalid id")
+    name = value.get("name")
+    check(name is None or isinstance(name, str), f"{where} has an invalid name")
+    field = value.get("field")
+    check(isinstance(field, str) and field.isdigit(), f"{where} has an invalid field")
+    n = value.get("n")
+    if not isinstance(n, int) or isinstance(n, bool) or n < 1:
+        fail(f"{where} has an invalid size")
+    rank = value.get("rank")
+    if not isinstance(rank, int) or isinstance(rank, bool) or not 0 <= rank <= n:
+        fail(f"{where} has an invalid rank")
+
+    alpha = value.get("alpha")
+    if not isinstance(alpha, dict):
+        fail(f"{where} alpha must be an object")
+    alpha_keys = set(alpha)
+    if exact_keys:
+        check(alpha_keys == ALPHA_KEYS, f"{where} alpha keys do not match the compact schema")
+    else:
+        check(ALPHA_KEYS <= alpha_keys, f"{where} alpha is missing required fields")
+    numerator = alpha.get("numerator")
+    denominator = alpha.get("denominator")
+    check(
+        type(numerator) is int
+        and type(denominator) is int
+        and numerator >= 0
+        and denominator > 0,
+        f"{where} has an invalid alpha fraction",
+    )
+    current = value.get("current")
+    check(isinstance(current, bool), f"{where} has an invalid current flag")
+    created_at = value.get("created_at")
+    check(
+        isinstance(created_at, str)
+        and re.fullmatch(r"\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}", created_at) is not None,
+        f"{where} has an invalid creation timestamp",
+    )
+
+    return {
+        "id": record_id,
+        "name": name,
+        "field": field,
+        "n": n,
+        "rank": rank,
+        "alpha": {"numerator": numerator, "denominator": denominator},
+        "current": current,
+        "created_at": created_at,
+    }
+
+
+def load_record_extract() -> tuple[dict[str, Any], dict[int, dict[str, Any]]]:
+    extract = load_json(ROOT / RECORD_EXTRACT_PATH)
+    check(isinstance(extract, dict), "website record extract must be a JSON object")
     expected_keys = {
         "schema_version",
-        "snapshot_date",
-        "snapshot_file",
         "source_url",
         "retrieved_at_utc",
         "etag",
-        "sha256",
-        "source_repository",
-        "source_commit",
+        "source_response_sha256",
+        "selection",
+        "records",
     }
-    check(set(manifest) == expected_keys, "snapshot manifest keys do not match schema version 1")
-    check(manifest["schema_version"] == 1, "unsupported snapshot manifest schema version")
-    check(manifest["snapshot_date"] == SNAPSHOT_DATE, "snapshot manifest date mismatch")
-    check(manifest["snapshot_file"] == SNAPSHOT_FILENAME, "snapshot filename mismatch")
-    check(manifest["source_url"] == SNAPSHOT_URL, "snapshot source URL mismatch")
-    check(manifest["source_repository"] == SOURCE_REPOSITORY, "source repository mismatch")
-    check(manifest["source_commit"] == SOURCE_COMMIT, "website source commit mismatch")
+    check(set(extract) == expected_keys, "website record extract keys do not match schema version 1")
+    check(extract["schema_version"] == 1, "unsupported website record extract schema version")
+    check(extract["source_url"] == SOURCE_URL, "website record extract source URL mismatch")
+    retrieved_at = extract["retrieved_at_utc"]
     check(
-        manifest["retrieved_at_utc"] == SNAPSHOT_RETRIEVED_AT,
-        "snapshot retrieval timestamp differs from the archived response",
+        isinstance(retrieved_at, str)
+        and re.fullmatch(r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z", retrieved_at) is not None,
+        "website record extract retrieval time must be an exact UTC timestamp",
     )
-    check(manifest["etag"] == SNAPSHOT_ETAG, "snapshot ETag differs from the archived response")
-    check(manifest["sha256"] == SNAPSHOT_SHA256, "snapshot SHA-256 differs from the known digest")
-    check(
-        isinstance(manifest["retrieved_at_utc"], str)
-        and re.fullmatch(r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z", manifest["retrieved_at_utc"])
-        is not None,
-        "snapshot retrieval time must be an exact UTC timestamp",
-    )
-    retrieval = datetime.strptime(manifest["retrieved_at_utc"], "%Y-%m-%dT%H:%M:%SZ")
-    check(retrieval.date().isoformat() == SNAPSHOT_DATE, "retrieval date differs from snapshot date")
-    check(
-        isinstance(manifest["etag"], str)
-        and 0 < len(manifest["etag"]) <= 200
-        and "\n" not in manifest["etag"],
-        "snapshot ETag must be a nonempty single-line string",
-    )
-    check(
-        isinstance(manifest["sha256"], str)
-        and re.fullmatch(r"[0-9a-f]{64}", manifest["sha256"]) is not None,
-        "snapshot SHA-256 must be 64 lowercase hexadecimal characters",
-    )
-
-    snapshot_path = ROOT / "data" / manifest["snapshot_file"]
+    # Parse as well as pattern-match so impossible calendar dates cannot enter the fixture.
     try:
-        snapshot_bytes = snapshot_path.read_bytes()
-    except OSError as error:
-        fail(f"could not read archived website database: {error}")
-    observed_hash = hashlib.sha256(snapshot_bytes).hexdigest()
-    check(observed_hash == manifest["sha256"], "archived database SHA-256 mismatch")
-    snapshot = load_json(snapshot_path)
-    check(isinstance(snapshot, dict), "archived website database must be an object")
-    check(set(snapshot) == {"count", "matroids"}, "archived database top-level shape changed")
-    check(isinstance(snapshot["matroids"], list), "archived database matroids must be a list")
-    check(snapshot["count"] == len(snapshot["matroids"]), "archived database count mismatch")
+        datetime.strptime(retrieved_at, "%Y-%m-%dT%H:%M:%SZ")
+    except ValueError as error:
+        fail(f"website record extract has an invalid retrieval timestamp: {error}")
+    etag = extract["etag"]
+    check(
+        isinstance(etag, str) and 0 < len(etag) <= 200 and "\n" not in etag,
+        "website record extract ETag must be a nonempty single-line string",
+    )
+    source_hash = extract["source_response_sha256"]
+    check(
+        isinstance(source_hash, str) and re.fullmatch(r"[0-9a-f]{64}", source_hash) is not None,
+        "website response SHA-256 must be 64 lowercase hexadecimal characters",
+    )
 
+    selection = extract["selection"]
+    check(isinstance(selection, dict), "website record selection must be an object")
+    check(set(selection) == {"fields", "current"}, "website record selection keys changed")
+    check(selection["fields"] == list(EXPECTED_FIELDS), "website record selection fields changed")
+    check(selection["current"] is True, "website record selection must require current records")
+
+    record_values = extract["records"]
+    check(isinstance(record_values, list), "website record extract records must be a list")
+    check(len(record_values) == len(EXPECTED_FIELDS), "website record extract must contain five records")
     records: dict[int, dict[str, Any]] = {}
-    for index, record in enumerate(snapshot["matroids"]):
-        where = f"archived database record {index + 1}"
-        check(isinstance(record, dict), f"{where} must be an object")
-        record_id = record.get("id")
-        check(isinstance(record_id, int) and record_id > 0, f"{where} has an invalid id")
-        check(record_id not in records, f"archived database repeats record id {record_id}")
-        check(record.get("name") is None or isinstance(record.get("name"), str), f"{where} name invalid")
-        check(
-            isinstance(record.get("field"), str) and record["field"].isdigit(),
-            f"{where} field invalid",
-        )
-        check(isinstance(record.get("n"), int) and record["n"] >= 1, f"{where} n invalid")
-        check(
-            isinstance(record.get("rank"), int) and 0 <= record["rank"] <= record["n"],
-            f"{where} rank invalid",
-        )
-        alpha = record.get("alpha")
-        check(isinstance(alpha, dict), f"{where} alpha must be an object")
-        check(
-            isinstance(alpha.get("numerator"), int)
-            and isinstance(alpha.get("denominator"), int)
-            and alpha["numerator"] >= 0
-            and alpha["denominator"] > 0,
-            f"{where} alpha fraction invalid",
-        )
-        check(isinstance(record.get("current"), bool), f"{where} current flag invalid")
+    ordered_fields: list[int] = []
+    for index, value in enumerate(record_values):
+        record = canonical_record(value, f"website record extract entry {index + 1}", exact_keys=True)
+        record_id = record["id"]
+        check(record_id not in records, f"website record extract repeats record id {record_id}")
+        check(record["current"] is True, f"website record extract entry {index + 1} is not current")
+        ordered_fields.append(int(record["field"]))
         records[record_id] = record
+    check(
+        ordered_fields == list(EXPECTED_FIELDS),
+        "website record extract records must be ordered by the selected fields",
+    )
+    return extract, records
 
+
+def fetch_live_current_records() -> dict[int, dict[str, Any]]:
+    request = Request(
+        SOURCE_URL,
+        headers={"Accept": "application/json", "User-Agent": "matroid-family-verifier/1"},
+    )
+    try:
+        with urlopen(request, timeout=LIVE_REQUEST_TIMEOUT_SECONDS) as response:
+            response_bytes = response.read()
+    except HTTPError as error:
+        fail(f"live database HTTP request failed with status {error.code}: {error.reason}")
+    except (URLError, TimeoutError, OSError) as error:
+        fail(f"live database network request failed: {error}")
+
+    try:
+        live = json.loads(response_bytes)
+    except (UnicodeError, json.JSONDecodeError) as error:
+        fail(f"live database returned invalid JSON: {error}")
+    check(isinstance(live, dict), "live database JSON must be an object")
+    matroids = live.get("matroids")
+    check(isinstance(matroids, list), "live database JSON must contain a matroids list")
+    if "count" in live:
+        check(
+            type(live["count"]) is int and live["count"] == len(matroids),
+            "live database count does not match its matroids list",
+        )
+
+    result: dict[int, dict[str, Any]] = {}
     for q in EXPECTED_FIELDS:
-        current = [
-            record
-            for record in records.values()
-            if record["field"] == str(q) and record["current"] is True
+        candidates = [
+            (index, value)
+            for index, value in enumerate(matroids)
+            if isinstance(value, dict)
+            and value.get("field") == str(q)
+            and value.get("current") is True
         ]
-        check(len(current) == 1, f"expected exactly one current archived record for GF({q})")
-    return manifest, records
+        check(len(candidates) == 1, f"live database must have exactly one current record for GF({q})")
+        index, candidate = candidates[0]
+        result[q] = canonical_record(
+            candidate,
+            f"live database record {index + 1} for GF({q})",
+            exact_keys=False,
+        )
+    return result
+
+
+def check_live_records(records: dict[int, dict[str, Any]]) -> None:
+    expected = current_records_by_field(records)
+    observed = fetch_live_current_records()
+    for q in EXPECTED_FIELDS:
+        if observed[q] != expected[q]:
+            expected_text = json.dumps(expected[q], sort_keys=True, separators=(",", ":"))
+            observed_text = json.dumps(observed[q], sort_keys=True, separators=(",", ":"))
+            fail(
+                f"live current record drift for GF({q}): "
+                f"fixture={expected_text}; live={observed_text}"
+            )
 
 
 def record_fraction(record: dict[str, Any]) -> Fraction:
@@ -428,23 +510,19 @@ def current_records_by_field(records: dict[int, dict[str, Any]]) -> dict[int, di
     }
 
 
-def check_snapshot_reference(data: dict[str, Any], where: str) -> None:
-    check(data.get("snapshot_date") == SNAPSHOT_DATE, f"{where}: snapshot date mismatch")
+def check_record_extract_reference(data: dict[str, Any], where: str) -> None:
     check(
-        data.get("website_database_snapshot") == f"data/{SNAPSHOT_FILENAME}",
-        f"{where}: archived database path mismatch",
+        data.get("website_record_extract") == RECORD_EXTRACT_PATH,
+        f"{where}: website record extract path mismatch",
     )
-    check(
-        data.get("website_database_manifest")
-        == "data/website_database_snapshot_manifest.json",
-        f"{where}: snapshot manifest path mismatch",
-    )
+    for obsolete_key in ("snapshot_date", "website_database_snapshot", "website_database_manifest"):
+        check(obsolete_key not in data, f"{where}: obsolete snapshot key {obsolete_key!r} remains")
 
 
 def check_old_special_case_data(records: dict[int, dict[str, Any]]) -> None:
     data = load_json(ROOT / "data" / "improved_members.json")
     check(isinstance(data, dict), "improved_members.json must contain an object")
-    check_snapshot_reference(data, "improved_members.json")
+    check_record_extract_reference(data, "improved_members.json")
     check(
         data.get("role") == "regression data for the old (k,r)=(3,2) special case",
         "old-special-case role changed",
@@ -460,7 +538,7 @@ def check_old_special_case_data(records: dict[int, dict[str, Any]]) -> None:
         q = member["q"]
         context = f"old special-case member q={q}"
         check(member["field"] == q, f"{context}: field and q differ")
-        check(member["previous_record"] == record_metadata(current[q]), f"{context}: archived record mismatch")
+        check(member["previous_record"] == record_metadata(current[q]), f"{context}: record extract mismatch")
         previous_ratio = record_fraction(current[q])
         observed_ratio = exact_fraction(member["distinguished_pair_ratio"], f"{context} ratio")
         check(observed_ratio == exact_ratio(q, 2, 3), f"{context}: ratio formula mismatch")
@@ -483,8 +561,14 @@ def check_old_special_case_data(records: dict[int, dict[str, Any]]) -> None:
             signed_data_fraction(member["difference"], f"{context} difference") == difference,
             f"{context}: difference mismatch",
         )
-        check(difference > 0, f"{context}: no longer improves the archived record")
-        check(member["strict_improvement"] is True, f"{context}: improvement flag must be true")
+        check(
+            isinstance(member["strict_improvement"], bool),
+            f"{context}: improvement flag must be Boolean",
+        )
+        check(
+            member["strict_improvement"] is (difference > 0),
+            f"{context}: improvement flag disagrees with the exact difference",
+        )
 
 
 def plotted_points_by_field() -> dict[int, list[tuple[int, dict[str, Any]]]]:
@@ -522,10 +606,10 @@ EXPECTED_SUBFAMILY = {
 }
 
 
-def check_fixed_field_data(records: dict[int, dict[str, Any]]) -> None:
+def check_fixed_field_data(records: dict[int, dict[str, Any]]) -> dict[str, Any]:
     data = load_json(ROOT / "data" / "fixed_field_bounds.json")
     check(isinstance(data, dict), "fixed_field_bounds.json must contain an object")
-    check_snapshot_reference(data, "fixed_field_bounds.json")
+    check_record_extract_reference(data, "fixed_field_bounds.json")
     check(data.get("submitted_subfamily") == EXPECTED_SUBFAMILY, "submitted_subfamily strings changed")
     check(
         exact_fraction(data["submitted_subfamily"]["iterated_supremum"], "iterated supremum")
@@ -544,7 +628,7 @@ def check_fixed_field_data(records: dict[int, dict[str, Any]]) -> None:
         q = entry["field"]
         context = f"fixed-field entry q={q}"
         record = current[q]
-        check(entry["previous_record"] == record_metadata(record), f"{context}: archived record mismatch")
+        check(entry["previous_record"] == record_metadata(record), f"{context}: record extract mismatch")
         previous_ratio = record_fraction(record)
         bound = exact_fraction(entry["fixed_field_lower_bound"], f"{context} bound")
         check(bound == limiting_ratio(q, 2), f"{context}: fixed-field formula mismatch")
@@ -587,6 +671,130 @@ def check_fixed_field_data(records: dict[int, dict[str, Any]]) -> None:
                 exact_ratio(q, earlier_r, 2) <= previous_ratio,
                 f"{context}: r={earlier_r} is an earlier unreported witness",
             )
+    return data
+
+
+def tex_fraction(value: str) -> str:
+    fraction = signed_data_fraction(value, "Markdown parity fraction")
+    check(fraction >= 0, "Markdown parity requires a nonnegative fraction")
+    if fraction.denominator == 1:
+        return str(fraction.numerator)
+    return rf"\frac{{{fraction.numerator}}}{{{fraction.denominator}}}"
+
+
+def check_record_markdown_parity(data: dict[str, Any], extract: dict[str, Any]) -> None:
+    entries = {entry["field"]: entry for entry in data["fields"]}
+    extracted_records = {int(record["field"]): record for record in extract["records"]}
+    improvement_fields = tuple(
+        q for q in EXPECTED_FIELDS if entries[q]["comparison"] == "strict improvement"
+    )
+    retrieved_at = datetime.strptime(extract["retrieved_at_utc"], "%Y-%m-%dT%H:%M:%SZ")
+    retrieval_text = retrieved_at.strftime("retrieved %Y-%m-%d at %H:%M:%S UTC")
+
+    markdown: dict[str, str] = {}
+    for filename in ("README.md", "PROOF.md", "WEBSITE_SUBMISSION.md"):
+        try:
+            markdown[filename] = (ROOT / filename).read_text(encoding="utf-8")
+        except (OSError, UnicodeError) as error:
+            fail(f"could not read {filename}: {error}")
+        check(
+            RECORD_EXTRACT_PATH in markdown[filename],
+            f"{filename} does not cite the website record extract",
+        )
+        for obsolete_path in (
+            "data/website_database_2026-08-09.json",
+            "data/website_database_snapshot_manifest.json",
+        ):
+            check(obsolete_path not in markdown[filename], f"{filename} cites obsolete snapshot data")
+
+    normalized = {
+        filename: re.sub(r"\s+", "", text) for filename, text in markdown.items()
+    }
+    normalized_retrieval = re.sub(r"\s+", "", retrieval_text)
+    for filename in normalized:
+        check(
+            normalized_retrieval in normalized[filename],
+            f"{filename} retrieval timestamp differs from the website record extract",
+        )
+
+    for q in improvement_fields:
+        entry = entries[q]
+        record_ratio = entry["previous_record"]["alpha"]
+        limit_ratio = entry["fixed_field_lower_bound"]
+        limit_difference = entry["difference"]
+        witness = entry["first_plotted_k2_witness_above_record"]
+        check(isinstance(witness, dict), f"GF({q}) must have a first plotted witness")
+        witness_r = witness["r"]
+        witness_ratio = witness["distinguished_pair_ratio"]
+        expected_readme_row = (
+            f"| $\\mathbf F_{q}$ | ${limit_ratio}$ | ${record_ratio}$ | "
+            f"${limit_difference}$ | $r={witness_r}$, ${witness_ratio}$ |"
+        )
+        check(
+            expected_readme_row in markdown["README.md"],
+            f"README.md GF({q}) comparison row differs from fixed_field_bounds.json",
+        )
+        limit_equation = (
+            f"{tex_fraction(limit_ratio)}-{tex_fraction(record_ratio)}"
+            f"={tex_fraction(limit_difference)}>0."
+        )
+        for filename in ("PROOF.md", "WEBSITE_SUBMISSION.md"):
+            check(
+                limit_equation in normalized[filename],
+                f"{filename} GF({q}) limiting comparison differs from fixed_field_bounds.json",
+            )
+        expected_website_witness = (
+            f"firstplotted$k=2$witnessabove${record_ratio}$is$r={witness_r}$"
+        )
+        check(
+            expected_website_witness in normalized["WEBSITE_SUBMISSION.md"],
+            f"WEBSITE_SUBMISSION.md GF({q}) first-witness threshold differs from fixed-field data",
+        )
+        check(
+            tex_fraction(witness_ratio) in normalized["PROOF.md"],
+            f"PROOF.md GF({q}) witness ratio differs from fixed_field_bounds.json",
+        )
+
+    for q in (4, 7):
+        record = extracted_records[q]
+        record_name = record["name"]
+        check(isinstance(record_name, str), f"GF({q}) record name must be text for Markdown parity")
+        record_ratio = entries[q]["previous_record"]["alpha"]
+        record_identity = re.sub(
+            r"\s+",
+            "",
+            f"record #{record['id']}, `{record_name}`, with ratio ${record_ratio}$",
+        )
+        for filename in normalized:
+            check(
+                record_identity in normalized[filename],
+                f"{filename} GF({q}) record identity differs from the website record extract",
+            )
+
+    gf7 = entries[7]
+    gf7_record_ratio = gf7["previous_record"]["alpha"]
+    gf7_witness = gf7["first_plotted_k2_witness_above_record"]
+    check(isinstance(gf7_witness, dict), "GF(7) must have a first plotted witness")
+    gf7_witness_r = gf7_witness["r"]
+    witness_equation = (
+        f"{tex_fraction(gf7_witness['distinguished_pair_ratio'])}"
+        f"-{tex_fraction(gf7_record_ratio)}"
+        f"={tex_fraction(gf7_witness['difference'])}>0."
+    )
+    for filename in ("PROOF.md", "WEBSITE_SUBMISSION.md"):
+        check(
+            witness_equation in normalized[filename],
+            f"{filename} GF(7) witness comparison differs from fixed_field_bounds.json",
+        )
+
+    check(
+        re.search(
+            rf"firstplottedGF\(7\)witness.*?\$r={gf7_witness_r}\$member",
+            normalized["PROOF.md"],
+        )
+        is not None,
+        "PROOF.md GF(7) first-witness threshold differs from fixed_field_bounds.json",
+    )
 
 
 EXPECTED_SUBMISSION_TEXT = {
@@ -954,7 +1162,11 @@ def brute_force_basis_cells(q: int, r: int, k: int) -> tuple[int, int, int, int]
 
 
 def check_small_brute_force_counts() -> None:
-    for q, r, k in ((2, 2, 2), (2, 2, 3), (3, 2, 2)):
+    check(
+        basis_cell_counts(2, 3, 2) == (12288, 16384, 54528, 79872),
+        "higher-rank basis-cell regression values changed",
+    )
+    for q, r, k in ((2, 2, 2), (2, 2, 3), (3, 2, 2), (2, 3, 2)):
         check(
             brute_force_basis_cells(q, r, k) == basis_cell_counts(q, r, k),
             f"full basis-cell enumeration mismatch for q={q}, r={r}, k={k}",
@@ -985,11 +1197,23 @@ def check_all_json_parses() -> None:
         load_json(path)
 
 
+def parse_arguments() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--check-live-records",
+        action="store_true",
+        help="compare the compact record extract with the current website database",
+    )
+    return parser.parse_args()
+
+
 def main() -> None:
+    arguments = parse_arguments()
     check_closed_formulas()
-    _, records = load_database_snapshot()
+    extract, records = load_record_extract()
     check_old_special_case_data(records)
-    check_fixed_field_data(records)
+    fixed_field_data = check_fixed_field_data(records)
+    check_record_markdown_parity(fixed_field_data, extract)
     check_submission_payload()
     check_citation_pin()
     check_independent_local_counts()
@@ -997,6 +1221,8 @@ def main() -> None:
     check_small_brute_force_counts()
     check_markdown_style()
     check_all_json_parses()
+    if arguments.check_live_records:
+        check_live_records(records)
     print("all checks passed")
 
 

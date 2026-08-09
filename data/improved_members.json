@@ -1,7 +1,5 @@
 {
-  "snapshot_date": "2026-08-09",
-  "website_database_snapshot": "data/website_database_2026-08-09.json",
-  "website_database_manifest": "data/website_database_snapshot_manifest.json",
+  "website_record_extract": "data/website_record_extract_2026-08-09.json",
   "role": "regression data for the old (k,r)=(3,2) special case",
   "special_case_parameters": {
     "k": 3,
@@ -22,15 +20,15 @@
         "avoid_both": 13271040
       },
       "previous_record": {
-        "id": 5,
-        "name": "HSW spike construction at q = 4",
+        "id": 13,
+        "name": "[C 0 u 0; 0 C u 0; h h 0 1]",
         "field": "4",
-        "n": 18,
-        "rank": 5,
-        "alpha": "8/7",
+        "n": 26,
+        "rank": 9,
+        "alpha": "55752/48391",
         "current": true
       },
-      "difference": "1/91",
+      "difference": "1089/629083",
       "strict_improvement": true
     },
     {
@@ -46,16 +44,16 @@
         "avoid_both": 52298274672
       },
       "previous_record": {
-        "id": 6,
-        "name": "Double-extension sample over GF(7)",
+        "id": 12,
+        "name": "A variant of #11",
         "field": "7",
         "n": 26,
         "rank": 9,
-        "alpha": "280043/243256",
+        "alpha": "147888/125779",
         "current": true
       },
-      "difference": "194525/9973496",
-      "strict_improvement": true
+      "difference": "-26016/5156939",
+      "strict_improvement": false
     }
   ]
 }
