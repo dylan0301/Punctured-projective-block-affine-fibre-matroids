@@ -34,7 +34,7 @@ from generate_matrix import (  # noqa: E402
 RECORD_EXTRACT_PATH = "data/website_record_extract_2026-08-09.json"
 SOURCE_URL = "https://matroid-correlation-constants.icarm.cloud/database.json"
 LIVE_REQUEST_TIMEOUT_SECONDS = 20
-CITATION_COMMIT = "8b79fef1ceef5a6d90622b22d8167360b503e229"
+CITATION_COMMIT = "09a08cdfd60667dc6392609234d2a4d745ecc015"
 PROOF_URL = (
     "https://github.com/dylan0301/Punctured-projective-block-affine-fibre-matroids/"
     "blob/main/PROOF.md"
@@ -1065,7 +1065,7 @@ def check_citation_pin() -> None:
     except OSError as error:
         fail(f"could not read CITATION.cff: {error}")
     commit_lines = re.findall(r'^commit:\s*"?([0-9a-f]{40})"?\s*$', citation, re.MULTILINE)
-    check(commit_lines == [CITATION_COMMIT], "CITATION.cff must pin the audited proof commit")
+    check(commit_lines == [CITATION_COMMIT], "CITATION.cff must pin the cited repository commit")
 
 
 def vector_set_rank(vectors: tuple[tuple[int, ...], ...], q: int) -> int:
