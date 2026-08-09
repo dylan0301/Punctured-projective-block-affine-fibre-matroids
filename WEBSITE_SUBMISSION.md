@@ -1,32 +1,42 @@
 # Website submission instructions
 
-Target: <https://matroid-correlation-constants.icarm.cloud/?maxn=1000>
+Target: <https://matroid-correlation-constants.icarm.cloud/#submit-family>
 
-Use the **Infinite family** form.  This is not a concrete-verifier submission:
-the two record-improving members have $n=50$ and $n=149$, while the family
-claim is proved uniformly from the construction and basis-cell count.
+Use the **Infinite family** form. The family theorem is proved uniformly, but
+most useful finite members are far beyond the concrete verifier's ground-set
+limit. The submission must be classified as a certified lower bound: it proves
+the exact value of one distinguished-pair ratio, not the full invariant of
+every member.
 
-The proposal must be classified as a **certified lower bound** (`lower`), not an
-exact full-invariant claim.  The proof establishes one distinguished-pair ratio
-for every prime power $q$; it does not establish
-$\overline{\alpha}(M_q)=R_{ij}(M_q)$ for every $q$.
+The exact machine-readable payload is
+[`submission/family_form.json`](submission/family_form.json). The values below
+are a human-readable guide; the JSON file is the authoritative copy-paste
+source.
+
+## Submission classification
+
+- Claim type: `lower`
+- Supremum: `4/3`
+- Supremum status: `iterated limit`
+- Finite family submitted: $M_{q,2,r}$ for prime powers $q$ and $r\ge2$
+- Fixed-field limit: $4q/(3q+1)$ as $r\to\infty$
+- Global displayed supremum: $4/3$ as $q\to\infty$ afterwards
+
+Every plotted point is an actual finite-$r$ ratio. The value $4q/(3q+1)$ is
+not inserted as a finite point.
 
 ## Exact form fields
-
-The machine-readable copy is
-[`submission/family_form.json`](submission/family_form.json).  Enter these
-values in the family form.
 
 ### Family name
 
 ```text
-Three-punctured-line affine-fibre matroids
+Punctured-projective-block affine-fibre matroids
 ```
 
 ### Short chart name
 
 ```text
-Three punctured lines
+Punctured PG fibres
 ```
 
 ### Claim type
@@ -38,146 +48,168 @@ lower
 ### Parameter
 
 ```text
-prime powers \(q\ge 2\); the plotted members are restricted to the record-improving cases \(q=4\) and \(q=7\)
+prime powers q and integers r >= 2; the submitted curves use the k = 2 subfamily
 ```
 
 ### Formula
 
+The website requests TeX without delimiters in this field:
+
 ```text
-\overline{\alpha}(M_q)\ge R_{ij}(M_q)=\frac{6(q+1)}{5q+6}
+R_{ij}(M_{q,r})=\frac{4w_{q,r}}{1+2/(q-1)+2w_{q,r}},\quad x_{q,r}=\frac{r}{(q^r-1)/(q-1)-r},\quad w_{q,r}=\frac{q(r-x_{q,r})/(q-1)+rx_{q,r}+(r-1)x_{q,r}^2/2}{r+1},\quad \lim_{r\to\infty}R_{ij}(M_{q,r})=\frac{4q}{3q+1}
 ```
 
 ### Size and rank
 
+The website again requests TeX without delimiters:
+
 ```text
-|E(M_q)|=3q^2+2,\qquad \mathrm{rk}(M_q)=7
+|E(M_{q,r})|=\frac{2q^2(q^{r-1}-1)}{q-1}+2,\qquad \mathrm{rk}(M_{q,r})=2r+1
 ```
 
 ### Supremum
 
 ```text
-6/5
+4/3
 ```
 
 ### Supremum status
 
 ```text
-approached
+iterated limit
 ```
 
 ### Summary
 
 ```text
-For every prime power q, an explicit rank-7 GF(q)-representable matroid has a distinguished-pair ratio 6(q+1)/(5q+6), increasing to 6/5. The plotted members are exactly the current-record improvements: q=4 gives 15/13 on 50 elements, and q=7 gives 48/41 on 149 elements.
+For every prime power q and finite r >= 2, an explicit GF(q)-representable matroid has the displayed exact distinguished-pair ratio. As r tends to infinity this gives the fixed-field bound alpha-bar(GF(q)) >= 4q/(3q+1); these bounds tend to 4/3 as q tends to infinity.
 ```
 
 ### Construction
 
 ```text
-Let F=GF(q), W=U_1 direct-sum U_2 direct-sum U_3 with U_r=<a_r,z_r>, and j-bar=a_1+a_2+a_3. In V=F e_0 direct-sum W, include i=e_0 and j=(0,j-bar). On each projective line PG(U_r), delete [a_r], retain the q directions represented by z_r and a_r+s z_r for nonzero s in F, and replace every retained direction g by its complete affine fibre {t e_0+g:t in F}. The resulting vector matroid has rank 7 and 3q^2+2 elements.
+Let F=GF(q). Take two independent r-dimensional spaces U_1,U_2 with marked nonzero vectors a_1,a_2, and let W=U_1 direct-sum U_2 and V=F e_0 direct-sum W. In each PG(U_l), delete [a_l]. For every retained projective direction g, include its complete affine fibre {t e_0+g:t in F}. Finally include i=e_0 and j=a_1+a_2. The vector matroid of these columns has rank 2r+1 and the stated size. A more general proof with k blocks contains the earlier three-punctured-line family as (k,r)=(3,2).
 ```
 
 ### What the curve shows
 
 ```text
-This is a dashed certified lower-bound curve: it records the exact distinguished-pair value R_ij(M_q), not a proved formula for the full invariant \(\overline{\alpha}(M_q)\). Only q=4 and q=7 are plotted because these are the members that strictly improve the website's field records in the 2026-08-08 database snapshot. The general formula tends increasingly to 6/5 and never attains it.
+Each grouped curve fixes q and plots exact finite-r distinguished-pair values, so every point is realized by a finite matroid represented directly over GF(q). The curve is dashed because the proof gives alpha-bar(M_{q,r}) >= R_ij(M_{q,r}), not equality with the full invariant. A fixed-q curve converges to 4q/(3q+1), and the resulting fixed-field bounds converge to the iterated supremum 4/3 as q grows. The finite values need not be monotone in r.
 ```
 
 ### Proof status
 
 ```text
-Complete proof of the construction, rank, four basis-cell counts, distinguished-pair formula, monotonicity, and supremum is provided in the linked repository. The q=4 and q=7 record comparisons are exact. Equality with the full invariant of M_q for general q is not claimed.
+Complete proof of the representation, rank, size, four basis-cell counts, exact finite ratio, fixed-q limit, optimization over the block count, iterated supremum, and the old (k,r)=(3,2) special case is provided in the linked repository. Equality with the full invariant of each finite member is not claimed.
 ```
 
 ### Proof URL
 
 ```text
-https://github.com/dylan0301/Three-punctured-line-affine-fibre-matroids/blob/main/PROOF.md
+https://github.com/dylan0301/Three-punctured-line-affine-fibre-matroids/blob/agent/fixed-field-4q-over-3q-plus-1/PROOF.md
 ```
 
 ### Plotted members
 
-Paste the following JSON exactly.  It intentionally contains only GF(4) and
-GF(7).
+The form's `series` field is a JSON-encoded string. Copy it from
+[`submission/family_form.json`](submission/family_form.json), or use the
+formatted equivalent in
+[`submission/plotted_members.json`](submission/plotted_members.json). It
+contains five grouped curves, for $q=2,3,4,5,7$, and only exact finite values.
+Every point includes its actual ground-set size, rank, exact reduced fraction,
+and base-field tag.
 
-```json
-[{"parameter":"q = 4","n":50,"rank":7,"alpha":"15/13","field":4},{"parameter":"q = 7","n":149,"rank":7,"alpha":"48/41","field":7}]
-```
-
-### Discovered by
-
-```text
-Jeewon Kim
-```
-
-### Discovery date
+### Discovery record
 
 ```text
-2026-08-06
-```
-
-### AI used
-
-```text
-yes
-```
-
-### AI model
-
-```text
-GPT-5.6 Pro
+Discovered by: Jeewon Kim
+Discovery date: 2026-08-09
+AI used: yes
+AI model: GPT-5.6 Pro
+Public AI conversation: leave blank
 ```
 
 ### AI role
 
 ```text
-AI assisted with computational exploration, exact finite-field counting, symbolic simplification, proof auditing, record comparison, and preparation of reproducible submission files. The submitted claim is the distinguished-pair lower bound proved in the linked writeup.
+AI assisted with mathematical exploration, exact projective-geometry and affine-fibre counting, asymptotic simplification, proof auditing, record comparison, and preparation of reproducible submission files. The submitted claim is the distinguished-pair lower bound proved in the linked writeup.
 ```
 
-### Public AI conversation
+The public chat URL used for the earlier rank-$7$ result is not reused here,
+because it does not document the full generalized theorem.
 
-```text
-https://chatgpt.com/share/6a7698a2-c044-83ee-9851-1fcaac81cf25?ogimg=plain
-```
+## Previous result recovered exactly
 
-## Exact record comparisons
+The proof treats $k$ punctured blocks before specializing the submitted curves
+to $k=2$. At $(k,r)=(3,2)$ it recovers the former construction:
 
-The website database snapshot used here is dated 2026-08-08.
+$$
+|E(M_{q,3,2})|=3q^2+2,
+\qquad
+\mathrm{rk}(M_{q,3,2})=7,
+$$
+
+and
+
+$$
+R_{ij}(M_{q,3,2})=\frac{6(q+1)}{5q+6}.
+$$
+
+Thus the old result is a literal finite-parameter special case, not merely an
+analogy or an asymptotic consequence.
+
+## Exact fixed-field comparisons
+
+The live website database snapshot used here is dated 2026-08-09.
 
 ### GF(4)
 
 $$
-\frac{15}{13}-\frac87=\frac1{91}>0.
+\frac{16}{13}-\frac87=\frac8{91}>0.
 $$
 
-The proposed member has rank $7$, size $50$, and a proved distinguished-pair
-lower bound $15/13$.
+The first plotted $k=2$ witness above $8/7$ is $r=5$, with rank $11$, size
+$2722$, and ratio $50590/44111$.
+
+### GF(5)
+
+$$
+\frac54-\frac{4664}{4007}=\frac{1379}{16028}>0.
+$$
+
+The first plotted $k=2$ witness above $4664/4007$ is $r=5$, with rank $11$,
+size $7802$, and ratio $104950/90111$.
 
 ### GF(7)
 
 $$
-\frac{48}{41}-\frac{280043}{243256}
-=\frac{194525}{9973496}>0.
+\frac{14}{11}-\frac{280043}{243256}
+=\frac{325111}{2675816}>0.
 $$
 
-The proposed member has rank $7$, size $149$, and a proved
-distinguished-pair lower bound $48/41$.
+The first plotted $k=2$ witness above $280043/243256$ is $r=4$, with rank
+$9$, size $5588$, and ratio $3068/2623$.
+
+For GF(2), the limiting bound ties $8/7$. For GF(3),
+$6/5<100/81$, so neither is described as a strict improvement.
+
+## Difference from the website's geometry families
+
+Every finite member here has an explicit representation over the stated base
+field $\mathbf F_q$. The website's affine- and projective-geometry
+double-extension families may require passing to a larger extension field.
+Their limit $4q^2/(3q^2+1)$ therefore does not by itself give a bound for the
+correlation constant of the fixed field $\mathbf F_q$.
 
 ## Before submitting
-
-The two representation matrices can be generated deterministically with
-
-```bash
-python3 scripts/generate_matrix.py 4
-python3 scripts/generate_matrix.py 7
-```
 
 Run
 
 ```bash
 python3 scripts/verify.py
+python3 -m compileall scripts
+git diff --check
 ```
 
-and confirm that it prints `all checks passed`.  Then copy the values from
-`submission/family_form.json` into the website's Infinite family form.  The
-proposal will be pending until a site administrator reviews the mathematics.
+and confirm that the verifier prints `all checks passed`. The proposal remains
+pending until a site administrator reviews the proof.

@@ -1,4 +1,4 @@
-name: Verify submission data
+name: Verify generalized family and submission data
 
 on:
   push:
