@@ -37,6 +37,11 @@ SNAPSHOT_ETAG = '"e914a97cae79909837dfa9980ee465a6"'
 SNAPSHOT_SHA256 = "e914a97cae79909837dfa9980ee465a60139783da4114c6c5052659d9edf4db7"
 SOURCE_REPOSITORY = "https://github.com/icarm/matroid-correlation-constants"
 SOURCE_COMMIT = "d9fc87242e3128df5516401908064e9edc541e42"
+PROOF_COMMIT = "8b79fef1ceef5a6d90622b22d8167360b503e229"
+PROOF_URL = (
+    "https://github.com/dylan0301/Punctured-projective-block-affine-fibre-matroids/"
+    f"blob/{PROOF_COMMIT}/PROOF.md"
+)
 EXPECTED_FIELDS = (2, 3, 4, 5, 7)
 
 
@@ -769,15 +774,9 @@ def check_submission_payload() -> None:
         is not None,
         "discovery date must be YYYY-MM or YYYY-MM-DD",
     )
-    check(re.match(r"^https?://", form["proof_url"]) is not None, "proof URL must be HTTP(S)")
     check(
-        re.fullmatch(
-            r"https://github\.com/dylan0301/Punctured-projective-block-affine-fibre-matroids/"
-            r"blob/(?:main|[0-9a-f]{40})/PROOF\.md",
-            form["proof_url"],
-        )
-        is not None,
-        "proof URL must target this repository's main branch or an immutable commit",
+        form["proof_url"] == PROOF_URL,
+        "proof URL must target the audited immutable commit",
     )
     check(re.match(r"^https?://", form["ai_chat_url"]) is not None, "AI chat URL must be HTTP(S)")
     if form["ai_used"] == "yes":
@@ -849,6 +848,15 @@ def check_submission_payload() -> None:
             check(total_points <= 400, "plotted members exceed the 400-point total limit")
 
     check_website_submission_parity(form)
+
+
+def check_citation_pin() -> None:
+    try:
+        citation = (ROOT / "CITATION.cff").read_text(encoding="utf-8")
+    except OSError as error:
+        fail(f"could not read CITATION.cff: {error}")
+    commit_lines = re.findall(r'^commit:\s*"?([0-9a-f]{40})"?\s*$', citation, re.MULTILINE)
+    check(commit_lines == [PROOF_COMMIT], "CITATION.cff must pin the audited proof commit")
 
 
 def vector_set_rank(vectors: tuple[tuple[int, ...], ...], q: int) -> int:
@@ -983,6 +991,7 @@ def main() -> None:
     check_old_special_case_data(records)
     check_fixed_field_data(records)
     check_submission_payload()
+    check_citation_pin()
     check_independent_local_counts()
     check_generated_matrices()
     check_small_brute_force_counts()

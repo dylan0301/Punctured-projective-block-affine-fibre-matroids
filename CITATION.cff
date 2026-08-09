@@ -5,6 +5,7 @@ authors:
   - family-names: "Kim"
     given-names: "Jeewon"
 date-released: 2026-08-09
+commit: "8b79fef1ceef5a6d90622b22d8167360b503e229"
 license: MIT
 url: "https://github.com/dylan0301/Punctured-projective-block-affine-fibre-matroids"
 repository-code: "https://github.com/dylan0301/Punctured-projective-block-affine-fibre-matroids"

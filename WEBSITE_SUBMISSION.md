@@ -110,7 +110,7 @@ A complete analytic proof of the representation, rank, size, four basis-cell cou
 ### Proof URL
 
 ```text
-https://github.com/dylan0301/Punctured-projective-block-affine-fibre-matroids/blob/main/PROOF.md
+https://github.com/dylan0301/Punctured-projective-block-affine-fibre-matroids/blob/8b79fef1ceef5a6d90622b22d8167360b503e229/PROOF.md
 ```
 
 ### Plotted members
