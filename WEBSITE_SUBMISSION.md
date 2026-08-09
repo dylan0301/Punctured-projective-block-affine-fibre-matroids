@@ -88,7 +88,7 @@ For every prime power q and finite r >= 2, an explicit GF(q)-representable matro
 ### Construction
 
 ```text
-Let F=GF(q). Take two independent r-dimensional spaces U_1,U_2 with marked nonzero vectors a_1,a_2, and let W=U_1 direct-sum U_2 and V=F e_0 direct-sum W. In each PG(U_l), delete [a_l]. For every retained projective direction g, include its complete affine fibre {t e_0+g:t in F}. Finally include i=e_0 and j=a_1+a_2. The vector matroid of these columns has rank 2r+1 and the stated size. A more general proof with k blocks contains the earlier three-punctured-line family as (k,r)=(3,2).
+Let F=GF(q). Take two independent r-dimensional spaces U_1,U_2 with marked nonzero vectors a_1,a_2, and let W=U_1 direct-sum U_2 and V=F e_0 direct-sum W. In each PG(U_l), delete [a_l]. For every retained projective direction g, include its complete affine fibre {t e_0+g:t in F}. Finally include i=e_0 and j=a_1+a_2. The vector matroid of these columns has rank 2r+1 and the stated size.
 ```
 
 ### What the curve shows
@@ -100,7 +100,7 @@ Each grouped curve fixes q and plots exact finite-r distinguished-pair values, s
 ### Proof status
 
 ```text
-Complete proof of the representation, rank, size, four basis-cell counts, exact finite ratio, fixed-q limit, optimization over the block count, iterated supremum, and the old (k,r)=(3,2) special case is provided in the linked repository. Equality with the full invariant of each finite member is not claimed.
+Complete proof of the representation, rank, size, four basis-cell counts, exact finite ratio, fixed-q limit, optimization over the block count, and iterated supremum is provided in the linked repository. Equality with the full invariant of each finite member is not claimed.
 ```
 
 ### Proof URL
@@ -138,26 +138,6 @@ AI assisted with mathematical exploration, exact projective-geometry and affine-
 The linked public conversation documents the higher-rank construction, its
 exact counting formula, asymptotic bound, finite witnesses, and verification
 status.
-
-## Previous result recovered exactly
-
-The proof treats $k$ punctured blocks before specializing the submitted curves
-to $k=2$. At $(k,r)=(3,2)$ it recovers the former construction:
-
-$$
-|E(M_{q,3,2})|=3q^2+2,
-\qquad
-\mathrm{rk}(M_{q,3,2})=7,
-$$
-
-and
-
-$$
-R_{ij}(M_{q,3,2})=\frac{6(q+1)}{5q+6}.
-$$
-
-Thus the old result is a literal finite-parameter special case, not merely an
-analogy or an asymptotic consequence.
 
 ## Exact fixed-field comparisons
 
